@@ -1,38 +1,34 @@
 /*
   ==============================================================================
 
-    SimpleString.cpp
-    Created: 12 Feb 2021 1:10:03pm
-    Author:  Silvin Willemsen
+    ShamisenBridge.cpp
+    Created: 15 Feb 2021 1:36:53pm
+    Author:  tlasi
 
   ==============================================================================
 */
-
 #include <JuceHeader.h>
-#include "ShamisenString.h"
-
+#include "ShamisenBridge.h"
 //==============================================================================
-ShamisenString::ShamisenString (NamedValueSet& parameters, double k) :
-L (*parameters.getVarPointer ("L")),
-rho (*parameters.getVarPointer ("rho")),
-A (*parameters.getVarPointer ("A")),
-T (*parameters.getVarPointer ("T")),
-E (*parameters.getVarPointer ("E")),
-I (*parameters.getVarPointer ("I")),
-sigma0 (*parameters.getVarPointer ("sigma0")),
-sigma1 (*parameters.getVarPointer ("sigma1")),
+ShamisenBridge::ShamisenBridge (NamedValueSet& parameters, double k) :
+L (*parameters.getVarPointer ("LB")),
+rho (*parameters.getVarPointer ("rhoB")),
+A (*parameters.getVarPointer ("AB")),
+E (*parameters.getVarPointer ("EB")),
+I (*parameters.getVarPointer ("IB")),
+sigma0 (*parameters.getVarPointer ("sigma0B")),
+sigma1 (*parameters.getVarPointer ("sigma1B")),
+H (*parameters.getVarPointer ("HB")),
 k (k)
 {
-    cSq = T / (rho * A);                // Calculate wave speed (squared)
-    kappaSq = E * I / (rho * A);        // Calculate stiffness coefficient squared
+    kappaSq = E * H * H / (12 * rho);        // Calculate stiffness coefficient squared
 
-    double stabilityTerm = cSq * k * k + 4.0 * sigma1 * k; // just easier to write down below
+    double stabilityTerm = 4.0 * sigma1 * k; // just easier to write down below
     
     h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
     N = floor (L / h);
     h = 1.0 / N; // recalculate h
     
-    lambdaSq = cSq * k * k / (h * h);
     muSq = kappaSq * k * k / (h * h * h * h);
     
     // initialise vectors
@@ -60,8 +56,8 @@ k (k)
     
     D = 1.0 / (1.0 + sigma0 * k);
     
-    A1 = 2.0 - 2.0 * lambdaSq - 6.0 * muSq - 2.0 * B2; // u_l^n
-    A2 = lambdaSq + 4.0 * muSq + B2;                   // u_{l+-1}^n
+    A1 = 2.0 - 6.0 * muSq - 2.0 * B2; // u_l^n
+    A2 = 4.0 * muSq + B2;                   // u_{l+-1}^n
     A3 = -muSq;                                        // u_{l+-2}^n
     A4 = B1 - 1.0 + 2.0 * B2;                          // u_l^{n-1}
     A5 = -B2;                                          // u_{l+-1}^{n-1}
@@ -74,11 +70,11 @@ k (k)
     A5 *= D;
 }
 
-ShamisenString::~ShamisenString()
+ShamisenBridge::~ShamisenBridge()
 {
 }
 
-void ShamisenString::paint (juce::Graphics& g)
+void ShamisenBridge::paint (juce::Graphics& g)
 {
     /* This demo code just fills the component's background and
        draws some placeholder text to get you started.
@@ -94,18 +90,18 @@ void ShamisenString::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (14.0f);
-    g.drawText ("SimpleString", getLocalBounds(),
+    g.drawText ("Bridge", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
 }
 
-void ShamisenString::resized()
+void ShamisenBridge::resized()
 {
     // This method is where you should set the bounds of any child
     // components that your component contains..
 
 }
 
-void ShamisenString::calculateScheme()
+void ShamisenBridge::calculateScheme()
 {
     for (int l = 2; l < N-1; ++l) // clamped boundaries
         u[0][l] = A1 * u[1][l] + A2 * (u[1][l + 1] + u[1][l - 1]) + A3 * (u[1][l + 2] + u[1][l - 2])
@@ -113,7 +109,7 @@ void ShamisenString::calculateScheme()
     
 }
 
-void ShamisenString::updateStates()
+void ShamisenBridge::updateStates()
 {
     double* uTmp = u[2];
     u[2] = u[1];
@@ -121,7 +117,7 @@ void ShamisenString::updateStates()
     u[0] = uTmp;
 }
 
-void ShamisenString::excite()
+void ShamisenBridge::excite()
 {
     // Arbitrary excitation function. Just used this for testing purposes
     
@@ -140,7 +136,7 @@ void ShamisenString::excite()
     
 }
 
-void ShamisenString::mouseDown (const MouseEvent& e)
+void ShamisenBridge::mouseDown (const MouseEvent& e)
 {
     excite();
 }

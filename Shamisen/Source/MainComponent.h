@@ -1,8 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include <ShamisenString.h>
-
+//#include "ShamisenString.h"
+#include "ShamisenBridge.h"
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -24,10 +24,12 @@ public:
     void paint (juce::Graphics& g) override;
     void resized() override;
 
+    double limit (double val); // limiter for your ears
+    
 private:
     //==============================================================================
     // Your private member variables go here...
-    ShamisenString myString;
-
+    std::unique_ptr<ShamisenBridge> myShamisenString;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

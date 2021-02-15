@@ -1,25 +1,24 @@
 /*
   ==============================================================================
 
-    SimpleString.h
-    Created: 12 Feb 2021 1:10:03pm
-    Author:  Silvin Willemsen
+    Bridge.h
+    Created: 15 Feb 2021 1:37:24pm
+    Author:  tlasi
 
   ==============================================================================
 */
 
 #pragma once
-
 #include <JuceHeader.h>
 
 //==============================================================================
 /*
 */
-class ShamisenString  : public juce::Component
+class ShamisenBridge  : public juce::Component
 {
 public:
-    ShamisenString (NamedValueSet& parameters, double k);
-    ~ShamisenString() override;
+    ShamisenBridge (NamedValueSet& parameters, double k);
+    ~ShamisenBridge() override;
 
     void paint (juce::Graphics&) override;
     void resized() override;
@@ -34,7 +33,7 @@ public:
     void mouseDown (const MouseEvent& e) override;
     
 private:
-    double H, L, rho, A, T, E, I, cSq, kappaSq, sigma0, sigma1, lambdaSq, muSq, h, k;
+    double L, H,  rho, A, E, I, kappaSq, sigma0, sigma1, lambdaSq, muSq, h, k;
     int N; // number of intervals (N+1 is number of points including boundaries)
     
     // An (N+1) * 3 vector containing the state of the system at all time-steps
@@ -44,5 +43,5 @@ private:
     
     // Scheme variables
     double A1, A2, A3, A4, A5, B1, B2, D;
-    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShamisenString)
+    JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShamisenBridge)
 };

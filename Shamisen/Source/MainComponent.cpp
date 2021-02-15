@@ -3,10 +3,8 @@
 //==============================================================================
 MainComponent::MainComponent()
 {
-    // Make sure you set the size of the component after
-    // you add any child components.
-    setSize (800, 600);
-
+    // Moved setSize() (which calls resized) to prepareToPlay as our components need a sample rate before they can get initialised.
+    
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
@@ -19,7 +17,6 @@ MainComponent::MainComponent()
         // Specify the number of input and output channels that we want to open
         setAudioChannels (2, 2);
     }
-    myString = new ShamisenString
 }
 
 MainComponent::~MainComponent()
@@ -31,32 +28,58 @@ MainComponent::~MainComponent()
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
-    // This function will be called when the audio device is started, or when
-    // its settings (i.e. sample rate, block size, etc) are changed.
-
-    // You can use this function to initialise any resources you might need,
-    // but be careful - it will be called on the audio thread, not the GUI thread.
+    //// Set the paramters ///
+    NamedValueSet parameters;
     
-    // For more details, see the help for AudioProcessor::prepareToPlay()
+    // parameters you'll use to initialise more than one other parameter should be defined here
+    double r = 4.15e-4;
     
-    myString->allocateBuffers();
+    parameters.set ("L", 1);
+    parameters.set ("rho", 1156.481);
+    parameters.set ("A", r * r * double_Pi);
+    parameters.set ("T", 138.67);
+    parameters.set ("E", 9.9e9);
+    parameters.set ("I", r * r * r * r * double_Pi * 0.25);
+    parameters.set ("sigma0", 1.378);
+    parameters.set ("sigma1", 3.57e-3);
+    
+    parameters.set ("LB", 1);
+    parameters.set ("HB", 0.0075);
+    parameters.set ("bB", 2.69e-3);
+    parameters.set ("rhoB", 1190.0);
+    parameters.set ("AB", 2.69e-3 * 0.0075);
+    parameters.set ("EB", 3.2e9);
+    parameters.set ("sigma0B", 1.34);
+    parameters.set ("sigma1B", 4.59e-3);
+    
+    //// Initialise an instance of the SimpleString class ////
+    myShamisenString = std::make_unique<ShamisenBridge> (parameters, 1.0 / sampleRate);
+    
+    addAndMakeVisible (myShamisenString.get()); // add the string to the application
+    
+    // Moved setSize() (which calls resized) from the constructor to here as our components need a sample rate before they can get initialised.
+    setSize (800, 600);
 
 }
 
 void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& bufferToFill)
 {
-    // Your audio-processing code goes here!
-    float* const outputL = bufferToFill.buffer->getWritePointer(0);
-    float* const outputR = bufferToFill.buffer->getWritePointer(1);
-    // For more details, see the help for AudioProcessor::getNextAudioBlock()
-    for (int i = 0; i < bufferToFill.numSamples; ++i){
-        outputL[i] = myString->getOutput(myString.u1Next[]); 
-    }
-    // Right now we are not producing any data, in which case we need to clear the buffer
-    // (to prevent the output of random noise)
+    bufferToFill.clearActiveBufferRegion();
     
-    //bufferToFill.clearActiveBufferRegion();
-    myString->updateBuffers();
+    // Get pointers to output locations
+    float* const channelData1 = bufferToFill.buffer->getWritePointer (0, bufferToFill.startSample);
+    float* const channelData2 = bufferToFill.buffer->getWritePointer (1, bufferToFill.startSample);
+
+    float output = 0.0;
+    for (int i = 0; i < bufferToFill.numSamples; ++i)
+    {
+        myShamisenString->calculateScheme();
+        myShamisenString->updateStates();
+        
+        output = myShamisenString->getOutput (0.8); // get output at 0.8L of the string
+        channelData1[i] = limit (output);
+        channelData2[i] = limit (output);
+    }
 }
 
 void MainComponent::releaseResources()
@@ -70,15 +93,26 @@ void MainComponent::releaseResources()
 //==============================================================================
 void MainComponent::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    // You can add your drawing code here!
 }
 
 void MainComponent::resized()
 {
-    // This is called when the MainContentComponent is resized.
-    // If you add any child components, this is where you should
-    // update their positions.
+    // put the string in the application
+    myShamisenString->setBounds (getLocalBounds());
+}
+
+// limiter
+double MainComponent::limit (double val)
+{
+    if (val < -1)
+    {
+        val = -1;
+        return val;
+    }
+    else if (val > 1)
+    {
+        val = 1;
+        return val;
+    }
+    return val;
 }

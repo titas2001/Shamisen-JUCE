@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="zReP2o" name="ShamisenFromScratch" projectType="guiapp" useAppConfig="1"
+<JUCERPROJECT id="zReP2o" name="Shamisen" projectType="guiapp" useAppConfig="1"
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1">
-  <MAINGROUP id="eYI18M" name="ShamisenFromScratch">
+  <MAINGROUP id="eYI18M" name="Shamisen">
     <GROUP id="{FA54082D-ABF1-1E55-66D0-2ACFDC159846}" name="Source">
       <FILE id="cpavIn" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
       <FILE id="rvWhqn" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
@@ -12,6 +12,10 @@
             file="Source/ShamisenString.cpp"/>
       <FILE id="jhp5DY" name="ShamisenString.h" compile="0" resource="0"
             file="Source/ShamisenString.h"/>
+      <FILE id="xrk4Ae" name="ShamisenBridge.cpp" compile="1" resource="0"
+            file="Source/ShamisenBridge.cpp"/>
+      <FILE id="B5IsFQ" name="ShamisenBridge.h" compile="0" resource="0"
+            file="Source/ShamisenBridge.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
