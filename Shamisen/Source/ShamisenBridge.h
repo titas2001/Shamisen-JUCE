@@ -43,5 +43,7 @@ private:
     
     // Scheme variables
     double A1, A2, A3, A4, A5, B1, B2, D;
+    // virtual grid points
+    double um1 , um2, uPm1, up1, up2, uPp1;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShamisenBridge)
 };

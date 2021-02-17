@@ -15,7 +15,6 @@ L (*parameters.getVarPointer ("LB")),
 rho (*parameters.getVarPointer ("rhoB")),
 A (*parameters.getVarPointer ("AB")),
 E (*parameters.getVarPointer ("EB")),
-I (*parameters.getVarPointer ("IB")),
 sigma0 (*parameters.getVarPointer ("sigma0B")),
 sigma1 (*parameters.getVarPointer ("sigma1B")),
 H (*parameters.getVarPointer ("HB")),
@@ -103,10 +102,26 @@ void ShamisenBridge::resized()
 
 void ShamisenBridge::calculateScheme()
 {
-    for (int l = 2; l < N-1; ++l) // clamped boundaries
-        u[0][l] = A1 * u[1][l] + A2 * (u[1][l + 1] + u[1][l - 1]) + A3 * (u[1][l + 2] + u[1][l - 2])
-                + A4 * u[2][l] + A5 * (u[2][l + 1] + u[2][l - 1]);
     
+    // Calculate virtual grid points
+    um1 = 2*u[1][0]-u[1][1];                    // uB(-1)
+    um2 = 2*(um1+u[1][1])+u[1][2];              // uB(-2)
+    uPm1 = 2*u[2][0]-u[2][1];                   // uBPrev(-1)
+    up1 = 2*u[1][N] - u[1][N-1];                // uB(N+1)
+    up2 = 2*(up1 - u[1][N-1]) + u[1][N-2];      // uB(N+2)
+    uPp1 = 2*u[2][N] - u[2][N-1];               // uBPrev(N+1)
+    
+    
+    
+    u[0][1] = A1 * u[1][1] + A2 * (u[1][1 + 1] + u[1][1 - 1]) + A3 * (u[1][1 + 2] + um1) + A4 * u[2][1] + A5 * (u[2][1 + 1] + u[2][1 - 1]);
+    u[0][0] = A1 * u[1][0] + A2 * (u[1][1] + um1) + A3 * (u[1][2] + um2) + A4 * u[2][0] + A5 * (u[2][1] + uPm1);
+    
+    for (int l = 2; l < N-1; ++l) // clamped boundaries
+    {
+        u[0][l] = A1 * u[1][l] + A2 * (u[1][l + 1] + u[1][l - 1]) + A3 * (u[1][l + 2] + u[1][l - 2]) + A4 * u[2][l] + A5 * (u[2][l + 1] + u[2][l - 1]);
+    }
+    u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N-1 + 1] + u[1][N-1]) + A3 * (up1 + u[1][N-1 - 2]) + A4 * u[2][N-1] + A5 * (u[2][N-1 + 1] + u[2][N-1 - 1]);
+    u[0][N] = A1 * u[1][N] + A2 * (up1 + u[1][N - 1]) + A3 * (up2 + u[1][N - 2]) + A4 * u[2][N] + A5 * (uPp1 + u[2][N - 1]);
 }
 
 void ShamisenBridge::updateStates()
