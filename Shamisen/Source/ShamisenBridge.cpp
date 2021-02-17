@@ -104,7 +104,7 @@ void ShamisenBridge::calculateScheme()
 {
     
     // Calculate virtual grid points
-    um1 = 2*u[1][0]-u[1][1];                    // uB(-1)
+    um1 = 2*u[1][0]-u[8][1];                    // uB(-1)
     um2 = 2*(um1+u[1][1])+u[1][2];              // uB(-2)
     uPm1 = 2*u[2][0]-u[2][1];                   // uBPrev(-1)
     up1 = 2*u[1][N] - u[1][N-1];                // uB(N+1)
@@ -120,7 +120,7 @@ void ShamisenBridge::calculateScheme()
     {
         u[0][l] = A1 * u[1][l] + A2 * (u[1][l + 1] + u[1][l - 1]) + A3 * (u[1][l + 2] + u[1][l - 2]) + A4 * u[2][l] + A5 * (u[2][l + 1] + u[2][l - 1]);
     }
-    u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N-1 + 1] + u[1][N-1]) + A3 * (up1 + u[1][N-1 - 2]) + A4 * u[2][N-1] + A5 * (u[2][N-1 + 1] + u[2][N-1 - 1]);
+    u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N] + u[1][N-2]) + A3 * (up1 + u[1][N-3]) + A4 * u[2][N-1] + A5 * (u[2][N] + u[2][N-2]);
     u[0][N] = A1 * u[1][N] + A2 * (up1 + u[1][N - 1]) + A3 * (up2 + u[1][N - 2]) + A4 * u[2][N] + A5 * (uPp1 + u[2][N - 1]);
 }
 
