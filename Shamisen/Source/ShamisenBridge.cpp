@@ -28,8 +28,6 @@ k (k)
     N = floor (L / h);
     h = 1.0 / N; // recalculate h
     
-    muSq = kappaSq * k * k / (h * h * h * h);
-    
     // initialise vectors
     uStates.reserve (3); // prevents allocation errors
     
@@ -50,16 +48,14 @@ k (k)
         u[i] = &uStates[i][0];
     
     // set coefficients for update equation
-    B1 = sigma0 * k;
-    B2 = (2.0 * sigma1 * k) / (h * h);
     
-    D = 1.0 / (1.0 + sigma0 * k);
-    
-    A1 = 2.0 - 6.0 * muSq - 2.0 * B2; // u_l^n
-    A2 = 4.0 * muSq + B2;                   // u_{l+-1}^n
-    A3 = -muSq;                                        // u_{l+-2}^n
-    A4 = B1 - 1.0 + 2.0 * B2;                          // u_l^{n-1}
-    A5 = -B2;                                          // u_{l+-1}^{n-1}
+    D = 1.0 / (h*h*h*h*(1.0 + sigma0 * k));                        // u_l^{n+1}
+        
+    A1 = 2.0*h*h*h*h - 4.0*h*h*k*sigma1 - 6.0*k*k*kappaSq;         // u_l^n
+    A2 = 2.0*h*h*k*sigma1 + 4.0*k*k*kappaSq;                       // u_{l+-1}^n
+    A3 = -1.0*k*k*kappaSq;                                         // u_{l+-2}^n
+    A4 = h*h*h*h*k*sigma0 - h*h*h*h + 4.0*h*h*k*sigma1;            // u_l^{n-1}
+    A5 = -2.0*h*h*k*sigma1;                                        // u_{l+-1}^{n-1}
     
     // Divide by u_l^{n+1} term
     A1 *= D;
@@ -103,25 +99,26 @@ void ShamisenBridge::resized()
 void ShamisenBridge::calculateScheme()
 {
     
-    // Calculate virtual grid points
-    um1 = 2*u[1][0]-u[8][1];                    // uB(-1)
-    um2 = 2*(um1+u[1][1])+u[1][2];              // uB(-2)
-    uPm1 = 2*u[2][0]-u[2][1];                   // uBPrev(-1)
-    up1 = 2*u[1][N] - u[1][N-1];                // uB(N+1)
-    up2 = 2*(up1 - u[1][N-1]) + u[1][N-2];      // uB(N+2)
-    uPp1 = 2*u[2][N] - u[2][N-1];               // uBPrev(N+1)
+    /// Calculate virtual grid points
+    //um1 = 2*u[1][0]-u[8][1];                    // uB(-1)
+    //um2 = 2*(um1+u[1][1])+u[1][2];              // uB(-2)
+    //uPm1 = 2*u[2][0]-u[2][1];                   // uBPrev(-1)
+    //up1 = 2*u[1][N] - u[1][N-1];                // uB(N+1)
+    //up2 = 2*(up1 - u[1][N-1]) + u[1][N-2];      // uB(N+2)
+    //uPp1 = 2*u[2][N] - u[2][N-1];               // uBPrev(N+1)
     
     
     
-    u[0][1] = A1 * u[1][1] + A2 * (u[1][1 + 1] + u[1][1 - 1]) + A3 * (u[1][1 + 2] + um1) + A4 * u[2][1] + A5 * (u[2][1 + 1] + u[2][1 - 1]);
-    u[0][0] = A1 * u[1][0] + A2 * (u[1][1] + um1) + A3 * (u[1][2] + um2) + A4 * u[2][0] + A5 * (u[2][1] + uPm1);
+    
     
     for (int l = 2; l < N-1; ++l) // clamped boundaries
     {
         u[0][l] = A1 * u[1][l] + A2 * (u[1][l + 1] + u[1][l - 1]) + A3 * (u[1][l + 2] + u[1][l - 2]) + A4 * u[2][l] + A5 * (u[2][l + 1] + u[2][l - 1]);
     }
-    u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N] + u[1][N-2]) + A3 * (up1 + u[1][N-3]) + A4 * u[2][N-1] + A5 * (u[2][N] + u[2][N-2]);
-    u[0][N] = A1 * u[1][N] + A2 * (up1 + u[1][N - 1]) + A3 * (up2 + u[1][N - 2]) + A4 * u[2][N] + A5 * (uPp1 + u[2][N - 1]);
+    //u[0][1] = A1 * u[1][1] + A2 * (u[1][1 + 1] + u[1][1 - 1]) + A3 * (u[1][1 + 2] + um1) + A4 * u[2][1] + A5 * (u[2][1 + 1] + u[2][1 - 1]);
+    //u[0][0] = A1 * u[1][0] + A2 * (u[1][1] + um1) + A3 * (u[1][2] + um2) + A4 * u[2][0] + A5 * (u[2][1] + uPm1);
+    //u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N] + u[1][N-2]) + A3 * (up1 + u[1][N-3]) + A4 * u[2][N-1] + A5 * (u[2][N] + u[2][N-2]);
+    //u[0][N] = A1 * u[1][N] + A2 * (up1 + u[1][N - 1]) + A3 * (up2 + u[1][N - 2]) + A4 * u[2][N] + A5 * (uPp1 + u[2][N - 1]);
 }
 
 void ShamisenBridge::updateStates()

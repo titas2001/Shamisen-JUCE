@@ -52,6 +52,14 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("sigma0B", 1.34);
     parameters.set ("sigma1B", 4.59e-3);
     
+    parameters.set ("LM", 1);
+    parameters.set ("rhoM", 1150.0);
+    parameters.set ("TM", 138.67);
+    parameters.set ("EM", 9.9e9);
+    parameters.set ("sigma0M", 1.378);
+    parameters.set ("sigma1M", 3.57e-3);
+    
+    
     //// Initialise an instance of the SimpleString class ////
     myShamisenString = std::make_unique<ShamisenBridge> (parameters, 1.0 / sampleRate);
     
