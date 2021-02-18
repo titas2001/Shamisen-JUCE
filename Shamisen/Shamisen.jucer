@@ -5,9 +5,9 @@
   <MAINGROUP id="eYI18M" name="Shamisen">
     <GROUP id="{FA54082D-ABF1-1E55-66D0-2ACFDC159846}" name="Source">
       <FILE id="cpavIn" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
-      <FILE id="rvWhqn" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="LZBvkN" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
+      <FILE id="rvWhqn" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
       <FILE id="gK6gd3" name="ShamisenString.cpp" compile="1" resource="0"
             file="Source/ShamisenString.cpp"/>
       <FILE id="jhp5DY" name="ShamisenString.h" compile="0" resource="0"
