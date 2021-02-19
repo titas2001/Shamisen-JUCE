@@ -9,10 +9,12 @@
 */
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ShamisenMembrane.h"
+#include <math.h>  
 
 //==============================================================================
 ShamisenMembrane::ShamisenMembrane (NamedValueSet& parameters, double k) :
-L (*parameters.getVarPointer ("LM")),
+Lx (*parameters.getVarPointer ("Lx")),
+Ly (*parameters.getVarPointer ("Ly")),
 rho (*parameters.getVarPointer ("rhoM")),
 T (*parameters.getVarPointer ("TM")),
 E (*parameters.getVarPointer ("EM")),
@@ -29,18 +31,65 @@ k (k)
     double stabilityTerm = cSq * k * k + 4.0 * sigma1 * k; // just easier to write down below
     
     h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
-    Nx = floor (L / h);
-    Ny = Nx;
-    h = 1.0 / Nx; // recalculate h
     
-    lambdaSq = cSq * k * k / (h * h);
-    muSq = kappaSq * k * k / (h * h * h * h);
+    if (h < 0.09)
+        h = 0.09;
+        
+    Nx = floor(Lx/h);
+    Ny = floor(Ly/h);
+
     
     // initialise vectors
     uStates.reserve (3); // prevents allocation errors
+
+    
+
+    for (int i = 0; i < 3; ++i)
+
+        uStates.push_back (std::vector<std::vector<double>> (Nx+1,
+
+                           std::vector<double> (Ny+1, 0.0)));
+
+    
+
+    u.reserve (3);
+
+    
+
+    for (int i = 0; i < 3; ++i)
+
+        u.push_back (std::vector<double*> (Nx + 1, nullptr));
+
+    
+
+    /*  Make u pointers point to the first index of the state vectors.
+
+        To use u (and obtain a vector from the state vectors) use indices like u[n][l] where,
+
+             - n = 0 is u^{n+1},
+
+             - n = 1 is u^n, and
+
+             - n = 2 is u^{n-1}.
+
+        Also see calculateScheme()
+
+     */
+
+     
+
+    
+
+    for (int n = 0; n < 3; ++n)
+        for (int l = 0; l < Nx + 1; ++l)
+            u[n][l] = &uStates[n][l][0];
+    //===========================================================================================================
+  
+    /*
+    uStates.reserve (3); // prevents allocation errors
     
     for (int i = 0; i < 3; ++i)
-        std::vector<std::vector<double>> uStates(Nx+1, std::vector<double> (Ny+1, 0.0));
+        uStates.push_back (std::vector<std::vector<double>>(Nx+1, std::vector<double> (Ny+1, 0.0)));
     
     u.resize (3);
     
@@ -51,10 +100,12 @@ k (k)
              - n = 2 is u^{n-1}.
         Also see calculateScheme()
      */
-     
+     /*
     
     for (int i = 0; i < 3; ++i)
         u[i][0] = &uStates[i][0][0];
+    */
+    
     
     // set coefficients for update equation
     h4 = h*h*h*h; // h^4
@@ -126,17 +177,20 @@ void ShamisenMembrane::calculateScheme()
 
 void ShamisenMembrane::updateStates()
 {
-    std::vector<double*> uTmp = u[2];
-    u[2] = u[1];
-    u[1] = u[0];
-    u[0] = uTmp;
+   for (int l = 0; l <= Nx; ++l)
+    {
+        double* uTmp = u[2][l];
+        u[2][l] = u[1][l];
+        u[1][l] = u[0][l];
+        u[0][l] = uTmp;
+    }
 }
 
 void ShamisenMembrane::excite()
 {
     // Arbitrary excitation function. Just used this for testing purposes
     
-    double width = 10;
+    /*double width = 10;
     double pos = 0.3;
     int start = floor((Nx+1) * pos);
     int end = start+width;
@@ -150,7 +204,9 @@ void ShamisenMembrane::excite()
             u[1][l][m] += 0.5 * (1 - cos(2.0 * double_Pi * l / width));
             u[2][l][m] += 0.5 * (1 - cos(2.0 * double_Pi * l / width));
         }
-    }
+    }*/
+    u[1][4][4] = 1;
+    u[2][4][4] = 1;
 }
 
 void ShamisenMembrane::mouseDown (const MouseEvent& e)

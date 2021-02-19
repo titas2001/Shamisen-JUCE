@@ -52,17 +52,15 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("sigma0B", 1.34);
     parameters.set ("sigma1B", 4.59e-3);
     
-    parameters.set ("LM", 1);
+    parameters.set ("Lx", 1);
+    parameters.set ("Ly", 1);
     parameters.set ("rhoM", 1150.0);
-    parameters.set ("TM", 400.0);
+    parameters.set ("TM", 4000.0);
     parameters.set ("EM", 3e9);
     parameters.set ("HM", 0.0002);
-    parameters.set ("sigma0M", 1.37806);
-    parameters.set ("sigma1M", 9.60559e-2);
+    parameters.set ("sigma0M", 1.37806 );
+    parameters.set ("sigma1M", 1.539e-4);
     parameters.set ("nu", 0.4);
-    parameters.set ("Nx", 40);
-    parameters.set ("Ny", 40);
-    
     
     //// Initialise an instance of the SimpleString class ////
     myShamisenString = std::make_unique<ShamisenMembrane> (parameters, 1.0 / sampleRate);

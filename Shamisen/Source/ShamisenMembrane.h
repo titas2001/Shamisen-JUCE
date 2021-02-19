@@ -23,14 +23,21 @@ public:
     void calculateScheme();
     void updateStates();
     
-    double getOutput (double Lratio) { return u[1][static_cast<int> (round((Nx+1) * Lratio))][static_cast<int> (round((Ny+1) * Lratio))]; } //return u at the current sample at a location given by the length ratio
+    double getOutput (double Lratio) { 
+        //for(int i = 2; i<Nx-1; ++i){
+        //    for(int j = 2; j<Ny-1; ++j){
+                sum=u[1][3][3];
+        //    }
+        //}
+        return 100.0*sum;
+    } //return the sum of the vector values
     
     void excite();
     
     void mouseDown (const MouseEvent& e) override;
     
 private:
-    double T, L, H,  rho, E, cSq, kappaSq, sigma0, sigma1, lambdaSq, muSq, h, k, nu, D;
+    double T, Lx, Ly, H,  rho, E, cSq, kappaSq, sigma0, sigma1, h, k, nu, D, ratio;
     int Nx, Ny; // number of intervals (N+1 is number of points including boundaries)
     
     // An (N+1) * 3 vector containing the state of the system at all time-steps
@@ -42,6 +49,7 @@ private:
     double A1, A2, A3, A4, A5, A6, h4, B2, D1;
     // virtual grid points
     double um1 , um2, uPm1, up1, up2, uPp1;
+    double sum;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ShamisenMembrane)    
 };
 
