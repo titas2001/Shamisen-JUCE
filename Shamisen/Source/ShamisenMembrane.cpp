@@ -112,8 +112,8 @@ k (k)
     
     D1 = 1.0 / (1.0 + sigma0 * k);                                         // u{l,m}^{n+1}
     
-    A1 = (-20.0*kappaSq/h4 - 4.0*cSq/h*h - 8.0*sigma1/(k*h*h))*k*k + 2.0;  // u_{l,m}^n
-    A2 = (8.0*kappaSq/h4 + cSq/h*h + 2.0*sigma1/(k*h*h))*k*k;              // u_{l+-1 || m+-1}^n
+    A1 = (-20.0*kappaSq/h4 - 4.0*cSq/(h*h) - 8.0*sigma1/(k*h*h))*k*k + 2.0;  // u_{l,m}^n
+    A2 = (8.0*kappaSq/h4 + cSq/(h*h) + 2.0*sigma1/(k*h*h))*k*k;              // u_{l+-1 || m+-1}^n
     A3 = (-2.0*kappaSq*k*k)/(h4);                                          // u_{l+-2 && m+-2}^n
     A4 = (-1.0*kappaSq*k*k)/(h4);                                          // u_{l+-2 || m+-2}^{n}
     A5 = ((8.0*sigma1*k*k)/(k*h*h) + k*sigma0 - 1.0);                        // u_{l,m}^{n-1}
@@ -189,24 +189,23 @@ void ShamisenMembrane::updateStates()
 void ShamisenMembrane::excite()
 {
     // Arbitrary excitation function. Just used this for testing purposes
-    
-    /*double width = 10;
-    double pos = 0.3;
-    int start = floor((Nx+1) * pos);
-    int end = start+width;
+ 
+    int width = floor(Nx/2);
+    double pos = 0.23;
+    int startL = floor((Nx+1) * pos);
+    int endL = startL+width;
+    int startM = floor((Ny+1) * pos);
+    int endM = startM + width;
 
     // note the addition here
-
-    for (int l = start; l < end; ++l)
+    for (int l = startL; l < endL; ++l)
     {   
-        for (int m = start; m < end; ++m)
+        for (int m = startM; m < endM; ++m)
         {
-            u[1][l][m] += 0.5 * (1 - cos(2.0 * double_Pi * l / width));
-            u[2][l][m] += 0.5 * (1 - cos(2.0 * double_Pi * l / width));
+            u[1][l][m] += 0.0002 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
+            u[2][l][m] += 0.0002 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
         }
-    }*/
-    u[1][4][4] = 1;
-    u[2][4][4] = 1;
+    }
 }
 
 void ShamisenMembrane::mouseDown (const MouseEvent& e)

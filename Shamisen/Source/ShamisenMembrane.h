@@ -24,12 +24,12 @@ public:
     void updateStates();
     
     double getOutput (double Lratio) { 
-        //for(int i = 2; i<Nx-1; ++i){
-        //    for(int j = 2; j<Ny-1; ++j){
-                sum=u[1][3][3];
-        //    }
-        //}
-        return 100.0*sum;
+        for(int i = 2; i<Nx-1; ++i){
+            for(int j = 2; j<Ny-1; ++j){
+                sum+=u[1][i][j];
+            }
+        }
+        return sum;
     } //return the sum of the vector values
     
     void excite();
