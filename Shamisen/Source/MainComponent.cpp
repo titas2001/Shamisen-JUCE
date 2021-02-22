@@ -75,10 +75,10 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     //=======BRIDGE======================================
     
     parameters.set ("LB", 1);
-    parameters.set ("HB", 0.075);
+    parameters.set ("HB", 0.0075);
     parameters.set ("bB", 2.69e-3);
     parameters.set ("rhoB", 500.0);
-    parameters.set ("AB", 2.69e-3 * 0.075);
+    parameters.set ("AB", 2.69e-3 * 0.0075);
     parameters.set ("EB", 9.5e9);
     parameters.set ("sigma0B", 1.34);
     parameters.set ("sigma1B", 7.59e-2);
