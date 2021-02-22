@@ -9,9 +9,9 @@
 */
 
 #pragma once
+#include <iostream>
 
-
-class ShamisenMembrane : public juce::Component 
+class ShamisenMembrane : public juce::Component
 {
 public:
     ShamisenMembrane (NamedValueSet& parameters, double k);
@@ -24,11 +24,13 @@ public:
     void updateStates();
     
     double getOutput (double Lratio) { 
+        sum = 0;
         for(int i = 2; i<Nx-1; ++i){
             for(int j = 2; j<Ny-1; ++j){
                 sum+=u[1][i][j];
             }
         }
+        //Logger::getCurrentLogger()->outputDebugString(String(sum));
         return sum;
     } //return the sum of the vector values
     
@@ -44,7 +46,7 @@ private:
     // An (N+1) * 3 vector containing the state of the system at all time-steps
     std::vector<std::vector<std::vector<double>>> uStates;
     std::vector<std::vector<double*>> u; // vector of pointers to state vectors
-     
+    
     
     // Scheme variables
     double A1, A2, A3, A4, A5, A6, h4, B2, D1;

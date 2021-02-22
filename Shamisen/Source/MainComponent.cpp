@@ -4,7 +4,7 @@
 MainComponent::MainComponent()
 {
     // Moved setSize() (which calls resized) to prepareToPlay as our components need a sample rate before they can get initialised.
-    
+    Timer::startTimerHz(15);
     // Some platforms require permissions to open input channels so request that here
     if (juce::RuntimePermissions::isRequired (juce::RuntimePermissions::recordAudio)
         && ! juce::RuntimePermissions::isGranted (juce::RuntimePermissions::recordAudio))
@@ -22,9 +22,15 @@ MainComponent::MainComponent()
 MainComponent::~MainComponent()
 {
     // This shuts down the audio device and clears the audio source.
+    Timer::stopTimer();
+
     shutdownAudio();
 }
-
+void MainComponent::timerCallback()
+{
+    if (graphicsToggle)
+        repaint();
+}
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
 {
@@ -33,7 +39,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     
     // parameters you'll use to initialise more than one other parameter should be defined here
 
-    //=======STRING=======================================
+    //=======STRINGs=======================================
 
     double r1 = 4.15e-4;
     double r2 = 2.83e-4;
@@ -51,7 +57,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set("L2", 1);
     parameters.set("rho2", 1156.481);
     parameters.set("A2", r2 * r2 * double_Pi);
-    parameters.set("T2", 138.67);
+    parameters.set("T2", 145.53);
     parameters.set("E2", 9.9e9);
     parameters.set("I2", r2 * r2 * r2 * r2 * double_Pi * 0.25);
     parameters.set("sigma02", 1.378);
@@ -60,7 +66,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set("L3", 1);
     parameters.set("rho3", 1156.481);
     parameters.set("A3", r3 * r3 * double_Pi);
-    parameters.set("T3", 138.67);
+    parameters.set("T3", 140.73);
     parameters.set("E3", 9.9e9);
     parameters.set("I3", r3 * r3 * r3 * r3 * double_Pi * 0.25);
     parameters.set("sigma03", 1.378);
@@ -97,6 +103,8 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     myShamisenMembrane = std::make_unique<ShamisenMembrane>(parameters, 1.0 / sampleRate);
     
     //addAndMakeVisible (myShamisenString1.get()); // add the string to the application
+    //addAndMakeVisible (myShamisenString2.get()); // add the string to the application
+    //addAndMakeVisible (myShamisenString3.get()); // add the string to the application
     //addAndMakeVisible (myShamisenBridge.get()); // add the Bridge to the application
     addAndMakeVisible (myShamisenMembrane.get()); // add the Membrane to the application
     
@@ -120,6 +128,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         myShamisenMembrane->updateStates();
         
         output = myShamisenMembrane->getOutput (0.8); // get output at 0.8L of the string
+        
         channelData1[i] = limit (output);
         channelData2[i] = limit (output);
     }

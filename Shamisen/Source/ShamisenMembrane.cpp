@@ -115,8 +115,6 @@ void ShamisenMembrane::paint(Graphics& g)
             int cVal = clamp(255 * 0.5 * (u[1][x][y] * scaling + 1), 0, 255);
             g.setColour(Colour::fromRGBA(cVal, cVal, cVal, 127));
             g.fillRect((x - 2) * stateWidth, (y - 2) * stateHeight, stateWidth, stateHeight);
-            
-
         }
     }
 }
@@ -184,8 +182,8 @@ void ShamisenMembrane::excite()
     {   
         for (int m = startM; m < endM; ++m)
         {
-            u[1][l][m] += 0.0002 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
-            u[2][l][m] += 0.0002 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
+            u[1][l][m] += 0.02 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
+            u[2][l][m] += 0.02 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
         }
     }
 }
