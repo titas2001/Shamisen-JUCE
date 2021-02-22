@@ -21,15 +21,15 @@ MainComponent::MainComponent()
 
 MainComponent::~MainComponent()
 {
-    // This shuts down the audio device and clears the audio source.
-    Timer::stopTimer();
+	// This shuts down the audio device and clears the audio source.
+	Timer::stopTimer();
 
-    shutdownAudio();
+	shutdownAudio();
 }
 void MainComponent::timerCallback()
 {
-    if (graphicsToggle)
-        repaint();
+	if (graphicsToggle)
+		repaint();
 }
 //==============================================================================
 void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRate)
@@ -75,13 +75,13 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     //=======BRIDGE======================================
     
     parameters.set ("LB", 1);
-    parameters.set ("HB", 0.0075);
+    parameters.set ("HB", 0.075);
     parameters.set ("bB", 2.69e-3);
-    parameters.set ("rhoB", 1190.0);
-    parameters.set ("AB", 2.69e-3 * 0.0075);
-    parameters.set ("EB", 3.2e9);
+    parameters.set ("rhoB", 500.0);
+    parameters.set ("AB", 2.69e-3 * 0.075);
+    parameters.set ("EB", 9.5e9);
     parameters.set ("sigma0B", 1.34);
-    parameters.set ("sigma1B", 4.59e-3);
+    parameters.set ("sigma1B", 7.59e-2);
     
     //=======MEMBRANE====================================
 
@@ -97,17 +97,17 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     
     //// Initialise an instance of the SimpleString class ////
     //myShamisenString1 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "1");
-    //myShamisenString2 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "2");
-    //myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
-    //myShamisenBridge = std::make_unique<ShamisenBridge>(parameters, 1.0 / sampleRate);
-    myShamisenMembrane = std::make_unique<ShamisenMembrane>(parameters, 1.0 / sampleRate);
-    
     //addAndMakeVisible (myShamisenString1.get()); // add the string to the application
+    //myShamisenString2 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "2");
     //addAndMakeVisible (myShamisenString2.get()); // add the string to the application
+    //myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
     //addAndMakeVisible (myShamisenString3.get()); // add the string to the application
-    //addAndMakeVisible (myShamisenBridge.get()); // add the Bridge to the application
-    addAndMakeVisible (myShamisenMembrane.get()); // add the Membrane to the application
+    myShamisenBridge = std::make_unique<ShamisenBridge>(parameters, 1.0 / sampleRate);
+    addAndMakeVisible(myShamisenBridge.get()); // add the Bridge to the application
+    //myShamisenMembrane = std::make_unique<ShamisenMembrane>(parameters, 1.0 / sampleRate);
+    //addAndMakeVisible (myShamisenMembrane.get()); // add the Membrane to the application
     
+
     // Moved setSize() (which calls resized) from the constructor to here as our components need a sample rate before they can get initialised.
     setSize (800, 600);
 
@@ -124,10 +124,14 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     float output = 0.0;
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
-        myShamisenMembrane->calculateScheme();
-        myShamisenMembrane->updateStates();
-        
-        output = myShamisenMembrane->getOutput (0.8); // get output at 0.8L of the string
+        /*myShamisenString1->calculateScheme();
+        myShamisenString1->updateStates();*/
+        /*myShamisenMembrane->calculateScheme();
+        myShamisenMembrane->updateStates();*/
+        myShamisenBridge->calculateScheme();
+        myShamisenBridge->updateStates();
+
+        output = myShamisenBridge->getOutput (0.8); // get output at 0.8L of the string
         
         channelData1[i] = limit (output);
         channelData2[i] = limit (output);
@@ -150,21 +154,22 @@ void MainComponent::paint (juce::Graphics& g)
 void MainComponent::resized()
 {
     // put the string in the application
-    myShamisenMembrane->setBounds (getLocalBounds());
+    myShamisenBridge->setBounds (getLocalBounds());
+    //myShamisenMembrane->setBounds(getLocalBounds());
 }
 
 // limiter
 double MainComponent::limit (double val)
 {
-    if (val < -1)
-    {
-        val = -1;
-        return val;
-    }
-    else if (val > 1)
-    {
-        val = 1;
-        return val;
-    }
-    return val;
+	if (val < -1)
+	{
+		val = -1;
+		return val;
+	}
+	else if (val > 1)
+	{
+		val = 1;
+		return val;
+	}
+	return val;
 }

@@ -2,8 +2,8 @@
 
 #include <JuceHeader.h>
 //#include "ShamisenString.h"
-//#include "ShamisenBridge.h"
-#include "ShamisenMembrane.h"
+#include "ShamisenBridge.h"
+//#include "ShamisenMembrane.h"
 //==============================================================================
 /*
     This component lives inside our window, and this is where you should put all
@@ -34,8 +34,8 @@ private:
    // std::unique_ptr<ShamisenString> myShamisenString1;
    // std::unique_ptr<ShamisenString> myShamisenString2;
    // std::unique_ptr<ShamisenString> myShamisenString3;
-   // std::unique_ptr<ShamisenBridge> myShamisenBridge;
-    std::unique_ptr<ShamisenMembrane> myShamisenMembrane;
+    std::unique_ptr<ShamisenBridge> myShamisenBridge;
+    //std::unique_ptr<ShamisenMembrane> myShamisenMembrane;
     bool graphicsToggle = true;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)
 };

@@ -27,7 +27,7 @@ k (k)
     h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
     N = floor (L / h);
     h = 1.0 / N; // recalculate h
-    
+    Logger::getCurrentLogger()->outputDebugString("samples: "+String(N));
     // initialise vectors
     uStates.reserve (3); // prevents allocation errors
     
