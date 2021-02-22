@@ -18,7 +18,7 @@
 class ShamisenString  : public juce::Component
 {
 public:
-    ShamisenString (NamedValueSet& parameters, double k);
+    ShamisenString (NamedValueSet& parameters, double k, String stringIndex);
     ~ShamisenString() override;
 
     void paint (juce::Graphics&) override;

@@ -9,7 +9,6 @@
 */
 #include "../JuceLibraryCode/JuceHeader.h"
 #include "ShamisenMembrane.h"
-#include <math.h>  
 
 //==============================================================================
 ShamisenMembrane::ShamisenMembrane (NamedValueSet& parameters, double k) :
@@ -29,7 +28,6 @@ k (k)
     kappaSq = D / (rho * H);        // Calculate stiffness coefficient squared
 
     double stabilityTerm = cSq * k * k + 4.0 * sigma1 * k; // just easier to write down below
-    
     h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
     
     if (h < 0.09)
@@ -37,30 +35,18 @@ k (k)
         
     Nx = floor(Lx/h);
     Ny = floor(Ly/h);
-
     
     // initialise vectors
     uStates.reserve (3); // prevents allocation errors
 
-    
-
     for (int i = 0; i < 3; ++i)
-
         uStates.push_back (std::vector<std::vector<double>> (Nx+1,
-
                            std::vector<double> (Ny+1, 0.0)));
-
-    
 
     u.reserve (3);
 
-    
-
     for (int i = 0; i < 3; ++i)
-
         u.push_back (std::vector<double*> (Nx + 1, nullptr));
-
-    
 
     /*  Make u pointers point to the first index of the state vectors.
 
@@ -75,37 +61,11 @@ k (k)
         Also see calculateScheme()
 
      */
-
-     
-
-    
 
     for (int n = 0; n < 3; ++n)
         for (int l = 0; l < Nx + 1; ++l)
             u[n][l] = &uStates[n][l][0];
-    //===========================================================================================================
-  
-    /*
-    uStates.reserve (3); // prevents allocation errors
-    
-    for (int i = 0; i < 3; ++i)
-        uStates.push_back (std::vector<std::vector<double>>(Nx+1, std::vector<double> (Ny+1, 0.0)));
-    
-    u.resize (3);
-    
-    /*  Make u pointers point to the first index of the state vectors.
-        To use u (and obtain a vector from the state vectors) use indices like u[n][l] where,
-             - n = 0 is u^{n+1},
-             - n = 1 is u^n, and
-             - n = 2 is u^{n-1}.
-        Also see calculateScheme()
-     */
-     /*
-    
-    for (int i = 0; i < 3; ++i)
-        u[i][0] = &uStates[i][0][0];
-    */
-    
+    //===========================================================================================================    
     
     // set coefficients for update equation
     h4 = h*h*h*h; // h^4
@@ -131,16 +91,38 @@ k (k)
 ShamisenMembrane::~ShamisenMembrane()
 {
 }
+double ShamisenMembrane::clamp(double in, double min, double max)
+{
+    if (in > max)
+        return max;
+    else if (in < min)
+        return min;
+    else
+        return in;
+}
 
+void ShamisenMembrane::paint(Graphics& g)
+{
+
+    float stateWidth = getWidth() / static_cast<double> (Nx - 4);
+    float stateHeight = getHeight() / static_cast<double> (Ny - 4);
+    int scaling = 10000;
+
+    for (int x = 2; x < Nx - 2; ++x)
+    {
+        for (int y = 2; y < Ny - 2; ++y)
+        {
+            int cVal = clamp(255 * 0.5 * (u[1][x][y] * scaling + 1), 0, 255);
+            g.setColour(Colour::fromRGBA(cVal, cVal, cVal, 127));
+            g.fillRect((x - 2) * stateWidth, (y - 2) * stateHeight, stateWidth, stateHeight);
+            
+
+        }
+    }
+}
+/*
 void ShamisenMembrane::paint (juce::Graphics& g)
 {
-    /* This demo code just fills the component's background and
-       draws some placeholder text to get you started.
-
-       You should replace everything in this method with your own
-       drawing code..
-    */
-
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
     g.setColour (juce::Colours::grey);
@@ -151,7 +133,7 @@ void ShamisenMembrane::paint (juce::Graphics& g)
     g.drawText ("SimpleMembrane", getLocalBounds(),
                 juce::Justification::centred, true);   // draw some placeholder text
 }
-
+*/
 void ShamisenMembrane::resized()
 {
     // This method is where you should set the bounds of any child

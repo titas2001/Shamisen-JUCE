@@ -19,7 +19,7 @@ public:
 
     void paint (juce::Graphics&) override;
     void resized() override;
-
+    double clamp(double input, double min, double max);
     void calculateScheme();
     void updateStates();
     
@@ -39,7 +39,8 @@ public:
 private:
     double T, Lx, Ly, H,  rho, E, cSq, kappaSq, sigma0, sigma1, h, k, nu, D, ratio;
     int Nx, Ny; // number of intervals (N+1 is number of points including boundaries)
-    
+    std::vector <double> cpX;
+    std::vector <double> cpY;
     // An (N+1) * 3 vector containing the state of the system at all time-steps
     std::vector<std::vector<std::vector<double>>> uStates;
     std::vector<std::vector<double*>> u; // vector of pointers to state vectors

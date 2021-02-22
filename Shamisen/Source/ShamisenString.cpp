@@ -12,16 +12,17 @@
 #include "ShamisenString.h"
 
 //==============================================================================
-ShamisenString::ShamisenString (NamedValueSet& parameters, double k) :
-L (*parameters.getVarPointer ("L")),
-rho (*parameters.getVarPointer ("rho")),
-A (*parameters.getVarPointer ("A")),
-T (*parameters.getVarPointer ("T")),
-E (*parameters.getVarPointer ("E")),
-I (*parameters.getVarPointer ("I")),
-sigma0 (*parameters.getVarPointer ("sigma0")),
-sigma1 (*parameters.getVarPointer ("sigma1")),
-k (k)
+ShamisenString::ShamisenString (NamedValueSet& parameters, double k, String stringIndex) :
+        L (*parameters.getVarPointer ("L"+stringIndex)),
+        rho (*parameters.getVarPointer ("rho"+ stringIndex)),
+        A (*parameters.getVarPointer ("A" + stringIndex)),
+        T (*parameters.getVarPointer ("T" + stringIndex)),
+        E (*parameters.getVarPointer ("E" + stringIndex)),
+        I (*parameters.getVarPointer ("I" + stringIndex)),
+        sigma0 (*parameters.getVarPointer ("sigma0" + stringIndex)),
+        sigma1 (*parameters.getVarPointer ("sigma1" + stringIndex)),
+        k(k)
+        
 {
     cSq = T / (rho * A);                // Calculate wave speed (squared)
     kappaSq = E * I / (rho * A);        // Calculate stiffness coefficient squared

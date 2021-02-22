@@ -32,16 +32,41 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     NamedValueSet parameters;
     
     // parameters you'll use to initialise more than one other parameter should be defined here
-    double r = 4.15e-4;
+
+    //=======STRING=======================================
+
+    double r1 = 4.15e-4;
+    double r2 = 2.83e-4;
+    double r3 = 2.10e-4;
     
-    parameters.set ("L", 1);
-    parameters.set ("rho", 1156.481);
-    parameters.set ("A", r * r * double_Pi);
-    parameters.set ("T", 138.67);
-    parameters.set ("E", 9.9e9);
-    parameters.set ("I", r * r * r * r * double_Pi * 0.25);
-    parameters.set ("sigma0", 1.378);
-    parameters.set ("sigma1", 3.57e-3);
+    parameters.set ("L1", 1);
+    parameters.set ("rho1", 1156.481);
+    parameters.set ("A1", r1 * r1 * double_Pi);
+    parameters.set ("T1", 138.67);
+    parameters.set ("E1", 9.9e9);
+    parameters.set ("I1", r1 * r1 * r1 * r1 * double_Pi * 0.25);
+    parameters.set ("sigma01", 1.378);
+    parameters.set ("sigma11", 3.57e-3);
+
+    parameters.set("L2", 1);
+    parameters.set("rho2", 1156.481);
+    parameters.set("A2", r2 * r2 * double_Pi);
+    parameters.set("T2", 138.67);
+    parameters.set("E2", 9.9e9);
+    parameters.set("I2", r2 * r2 * r2 * r2 * double_Pi * 0.25);
+    parameters.set("sigma02", 1.378);
+    parameters.set("sigma12", 3.57e-3);
+
+    parameters.set("L3", 1);
+    parameters.set("rho3", 1156.481);
+    parameters.set("A3", r3 * r3 * double_Pi);
+    parameters.set("T3", 138.67);
+    parameters.set("E3", 9.9e9);
+    parameters.set("I3", r3 * r3 * r3 * r3 * double_Pi * 0.25);
+    parameters.set("sigma03", 1.378);
+    parameters.set("sigma13", 3.57e-3);
+
+    //=======BRIDGE======================================
     
     parameters.set ("LB", 1);
     parameters.set ("HB", 0.0075);
@@ -52,6 +77,8 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("sigma0B", 1.34);
     parameters.set ("sigma1B", 4.59e-3);
     
+    //=======MEMBRANE====================================
+
     parameters.set ("Lx", 1);
     parameters.set ("Ly", 1);
     parameters.set ("rhoM", 1150.0);
@@ -63,9 +90,15 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("nu", 0.4);
     
     //// Initialise an instance of the SimpleString class ////
-    myShamisenString = std::make_unique<ShamisenMembrane> (parameters, 1.0 / sampleRate);
+    //myShamisenString1 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "1");
+    //myShamisenString2 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "2");
+    //myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
+    //myShamisenBridge = std::make_unique<ShamisenBridge>(parameters, 1.0 / sampleRate);
+    myShamisenMembrane = std::make_unique<ShamisenMembrane>(parameters, 1.0 / sampleRate);
     
-    addAndMakeVisible (myShamisenString.get()); // add the string to the application
+    //addAndMakeVisible (myShamisenString1.get()); // add the string to the application
+    //addAndMakeVisible (myShamisenBridge.get()); // add the Bridge to the application
+    addAndMakeVisible (myShamisenMembrane.get()); // add the Membrane to the application
     
     // Moved setSize() (which calls resized) from the constructor to here as our components need a sample rate before they can get initialised.
     setSize (800, 600);
@@ -83,10 +116,10 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     float output = 0.0;
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
-        myShamisenString->calculateScheme();
-        myShamisenString->updateStates();
+        myShamisenMembrane->calculateScheme();
+        myShamisenMembrane->updateStates();
         
-        output = myShamisenString->getOutput (0.8); // get output at 0.8L of the string
+        output = myShamisenMembrane->getOutput (0.8); // get output at 0.8L of the string
         channelData1[i] = limit (output);
         channelData2[i] = limit (output);
     }
@@ -108,7 +141,7 @@ void MainComponent::paint (juce::Graphics& g)
 void MainComponent::resized()
 {
     // put the string in the application
-    myShamisenString->setBounds (getLocalBounds());
+    myShamisenMembrane->setBounds (getLocalBounds());
 }
 
 // limiter
