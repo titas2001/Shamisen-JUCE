@@ -1,8 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-//#include "ShamisenString.h"
-#include "ShamisenBridge.h"
+#include "ShamisenString.h"
+//#include "ShamisenBridge.h"
 //#include "ShamisenMembrane.h"
 //==============================================================================
 /*
@@ -32,9 +32,9 @@ private:
     //==============================================================================
     // Your private member variables go here...
    // std::unique_ptr<ShamisenString> myShamisenString1;
-   // std::unique_ptr<ShamisenString> myShamisenString2;
-   // std::unique_ptr<ShamisenString> myShamisenString3;
-    std::unique_ptr<ShamisenBridge> myShamisenBridge;
+    //std::unique_ptr<ShamisenString> myShamisenString2;
+    std::unique_ptr<ShamisenString> myShamisenString3;
+    //std::unique_ptr<ShamisenBridge> myShamisenBridge;
     //std::unique_ptr<ShamisenMembrane> myShamisenMembrane;
     bool graphicsToggle = true;
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MainComponent)

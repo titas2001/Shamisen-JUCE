@@ -100,10 +100,10 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     //addAndMakeVisible (myShamisenString1.get()); // add the string to the application
     //myShamisenString2 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "2");
     //addAndMakeVisible (myShamisenString2.get()); // add the string to the application
-    //myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
-    //addAndMakeVisible (myShamisenString3.get()); // add the string to the application
-    myShamisenBridge = std::make_unique<ShamisenBridge>(parameters, 1.0 / sampleRate);
-    addAndMakeVisible(myShamisenBridge.get()); // add the Bridge to the application
+    myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
+    addAndMakeVisible (myShamisenString3.get()); // add the string to the application
+    //myShamisenBridge = std::make_unique<ShamisenBridge>(parameters, 1.0 / sampleRate);
+    //addAndMakeVisible(myShamisenBridge.get()); // add the Bridge to the application
     //myShamisenMembrane = std::make_unique<ShamisenMembrane>(parameters, 1.0 / sampleRate);
     //addAndMakeVisible (myShamisenMembrane.get()); // add the Membrane to the application
     
@@ -124,14 +124,21 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     float output = 0.0;
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
-        /*myShamisenString1->calculateScheme();
-        myShamisenString1->updateStates();*/
+        //myShamisenString1->calculateScheme();
+        //myShamisenString1->updateStates();
+        //myShamisenString2->calculateScheme();
+        //myShamisenString2->updateStates();
+        myShamisenString3->calculateScheme();
+        myShamisenString3->updateStates();
         /*myShamisenMembrane->calculateScheme();
         myShamisenMembrane->updateStates();*/
-        myShamisenBridge->calculateScheme();
-        myShamisenBridge->updateStates();
+        //myShamisenBridge->calculateScheme();
+        //myShamisenBridge->updateStates();
 
-        output = myShamisenBridge->getOutput (0.8); // get output at 0.8L of the string
+        //output = myShamisenString1->getOutput(0.8); // get output at 0.8L of the string 1
+        //output = myShamisenString2->getOutput(0.8); // get output at 0.8L of the string 2
+        output = myShamisenString3->getOutput(0.8); // get output at 0.8L of the string 3
+        //output = myShamisenBridge->getOutput (0.8); // get output at 0.8L of the bridge
         
         channelData1[i] = limit (output);
         channelData2[i] = limit (output);
@@ -154,7 +161,10 @@ void MainComponent::paint (juce::Graphics& g)
 void MainComponent::resized()
 {
     // put the string in the application
-    myShamisenBridge->setBounds (getLocalBounds());
+    //myShamisenString1->setBounds(getLocalBounds());
+    //myShamisenString2->setBounds(getLocalBounds());
+    myShamisenString3->setBounds(getLocalBounds());
+    /*myShamisenBridge->setBounds (getLocalBounds());*/
     //myShamisenMembrane->setBounds(getLocalBounds());
 }
 
