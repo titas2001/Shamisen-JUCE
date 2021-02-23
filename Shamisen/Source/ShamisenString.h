@@ -34,7 +34,7 @@ public:
     void mouseDown (const MouseEvent& e) override;
     
 private:
-    double H, L, rho, A, T, E, I, cSq, kappaSq, sigma0, sigma1, lambdaSq, muSq, h, k;
+    double L, rho, A, T, E, I, cSq, kappaSq, sigma0, sigma1, lambdaSq, muSq, h, k;
     int N; // number of intervals (N+1 is number of points including boundaries)
     
     // An (N+1) * 3 vector containing the state of the system at all time-steps

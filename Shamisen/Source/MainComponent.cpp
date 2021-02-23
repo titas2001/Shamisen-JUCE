@@ -46,28 +46,24 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     double r3 = 2.10e-4;
     
     parameters.set ("L1", 1);
-    parameters.set ("rho1", 1156.481);
+    parameters.set ("rhoS", 1156.481);
     parameters.set ("A1", r1 * r1 * double_Pi);
     parameters.set ("T1", 138.67);
-    parameters.set ("E1", 9.9e9);
+    parameters.set ("ES", 9.9e9);
     parameters.set ("I1", r1 * r1 * r1 * r1 * double_Pi * 0.25);
     parameters.set ("sigma01", 1.378);
     parameters.set ("sigma11", 3.57e-3);
 
     parameters.set("L2", 1);
-    parameters.set("rho2", 1156.481);
     parameters.set("A2", r2 * r2 * double_Pi);
     parameters.set("T2", 145.53);
-    parameters.set("E2", 9.9e9);
     parameters.set("I2", r2 * r2 * r2 * r2 * double_Pi * 0.25);
     parameters.set("sigma02", 1.378);
     parameters.set("sigma12", 3.57e-3);
 
     parameters.set("L3", 1);
-    parameters.set("rho3", 1156.481);
     parameters.set("A3", r3 * r3 * double_Pi);
     parameters.set("T3", 140.73);
-    parameters.set("E3", 9.9e9);
     parameters.set("I3", r3 * r3 * r3 * r3 * double_Pi * 0.25);
     parameters.set("sigma03", 1.378);
     parameters.set("sigma13", 3.57e-3);
@@ -96,12 +92,12 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("nu", 0.4);
     
     //// Initialise an instance of the SimpleString class ////
-    //myShamisenString1 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "1");
-    //addAndMakeVisible (myShamisenString1.get()); // add the string to the application
+    myShamisenString1 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "1");
+    addAndMakeVisible (myShamisenString1.get()); // add the string to the application
     //myShamisenString2 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "2");
     //addAndMakeVisible (myShamisenString2.get()); // add the string to the application
-    myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
-    addAndMakeVisible (myShamisenString3.get()); // add the string to the application
+    //myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
+    //addAndMakeVisible (myShamisenString3.get()); // add the string to the application
     //myShamisenBridge = std::make_unique<ShamisenBridge>(parameters, 1.0 / sampleRate);
     //addAndMakeVisible(myShamisenBridge.get()); // add the Bridge to the application
     //myShamisenMembrane = std::make_unique<ShamisenMembrane>(parameters, 1.0 / sampleRate);
@@ -124,20 +120,20 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     float output = 0.0;
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
-        //myShamisenString1->calculateScheme();
-        //myShamisenString1->updateStates();
+        myShamisenString1->calculateScheme();
+        myShamisenString1->updateStates();
         //myShamisenString2->calculateScheme();
         //myShamisenString2->updateStates();
-        myShamisenString3->calculateScheme();
-        myShamisenString3->updateStates();
+        //myShamisenString3->calculateScheme();
+        //myShamisenString3->updateStates();
         /*myShamisenMembrane->calculateScheme();
         myShamisenMembrane->updateStates();*/
         //myShamisenBridge->calculateScheme();
         //myShamisenBridge->updateStates();
 
-        //output = myShamisenString1->getOutput(0.8); // get output at 0.8L of the string 1
+        output = myShamisenString1->getOutput(0.8); // get output at 0.8L of the string 1
         //output = myShamisenString2->getOutput(0.8); // get output at 0.8L of the string 2
-        output = myShamisenString3->getOutput(0.8); // get output at 0.8L of the string 3
+        //output = myShamisenString3->getOutput(0.8); // get output at 0.8L of the string 3
         //output = myShamisenBridge->getOutput (0.8); // get output at 0.8L of the bridge
         
         channelData1[i] = limit (output);
@@ -161,10 +157,10 @@ void MainComponent::paint (juce::Graphics& g)
 void MainComponent::resized()
 {
     // put the string in the application
-    //myShamisenString1->setBounds(getLocalBounds());
+    myShamisenString1->setBounds(getLocalBounds());
     //myShamisenString2->setBounds(getLocalBounds());
-    myShamisenString3->setBounds(getLocalBounds());
-    /*myShamisenBridge->setBounds (getLocalBounds());*/
+    //myShamisenString3->setBounds(getLocalBounds());
+    //myShamisenBridge->setBounds (getLocalBounds());
     //myShamisenMembrane->setBounds(getLocalBounds());
 }
 

@@ -4,7 +4,8 @@
               addUsingNamespaceToJuceHeader="1" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="eYI18M" name="Shamisen">
     <GROUP id="{FA54082D-ABF1-1E55-66D0-2ACFDC159846}" name="Source">
-      <FILE id="cpavIn" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
+      <FILE id="lfqArV" name="Shamisen.cpp" compile="1" resource="0" file="Source/Shamisen.cpp"/>
+      <FILE id="KXYxo1" name="Shamisen.h" compile="0" resource="0" file="Source/Shamisen.h"/>
       <FILE id="LZBvkN" name="MainComponent.cpp" compile="1" resource="0"
             file="Source/MainComponent.cpp"/>
       <FILE id="rvWhqn" name="MainComponent.h" compile="0" resource="0" file="Source/MainComponent.h"/>
@@ -20,6 +21,7 @@
             file="Source/ShamisenMembrane.cpp" skipPCH="0"/>
       <FILE id="mxypQE" name="ShamisenMembrane.h" compile="0" resource="0"
             file="Source/ShamisenMembrane.h"/>
+      <FILE id="cpavIn" name="Main.cpp" compile="1" resource="0" file="Source/Main.cpp"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1"/>
