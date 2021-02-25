@@ -9,8 +9,6 @@
 */
 #include <JuceHeader.h>
 #include "Shamisen.h"
-#define _USE_MATH_DEFINES // for C++
-#include <cmath>
 
 
 Shamisen::Shamisen(NamedValueSet& parameters, double k) :
@@ -29,7 +27,7 @@ Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	HM(*parameters.getVarPointer("HM")),
 	sigma0M(*parameters.getVarPointer("sigma0M"))
 {
-	myShamisenString1 = std::make_shared<ShamisenString>(parameters, k);
+	myShamisenString1 = std::make_shared<ShamisenString>(parameters, k, "1");
 	myShamisenBridge = std::make_shared<ShamisenBridge>(parameters, k);
 	myShamisenMembrane = std::make_shared<ShamisenMembrane>(parameters, k);
 
