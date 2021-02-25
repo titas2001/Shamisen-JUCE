@@ -37,11 +37,6 @@ public:
     std::shared_ptr<ShamisenBridge> getBridge() { return myShamisenBridge; };
     std::shared_ptr<ShamisenMembrane> getBody() { return myShamisenMembrane; };
 
-
-    // tromba marina had this: 
-    // void setCurSample (unsigned long curSamp) { curSample = curSamp; };
-
-    void reset();
 private:
     double k;
     // Instrument components (String, body and bridge)
