@@ -69,7 +69,6 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     
     parameters.set ("LB", 1);
     parameters.set ("HB", 0.0075);
-    parameters.set ("bB", 2.69e-3);
     parameters.set ("rhoB", 500.0);
     parameters.set ("AB", 2.69e-3 * 0.0075);
     parameters.set ("EB", 9.5e9);

@@ -12,12 +12,12 @@
 //==============================================================================
 ShamisenBridge::ShamisenBridge (NamedValueSet& parameters, double k) :
 L (*parameters.getVarPointer ("LB")),
+H(*parameters.getVarPointer("HB")),
 rho (*parameters.getVarPointer ("rhoB")),
 A (*parameters.getVarPointer ("AB")),
 E (*parameters.getVarPointer ("EB")),
 sigma0 (*parameters.getVarPointer ("sigma0B")),
 sigma1 (*parameters.getVarPointer ("sigma1B")),
-H (*parameters.getVarPointer ("HB")),
 k (k)
 {
     kappaSq = E * H * H / (12 * rho);        // Calculate stiffness coefficient squared
