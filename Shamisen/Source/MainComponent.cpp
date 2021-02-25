@@ -45,8 +45,8 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     double r2 = 2.83e-4;
     double r3 = 2.10e-4;
     
-    parameters.set ("sigma01", 1.378);
-    parameters.set ("sigma11", 3.57e-3);
+    parameters.set ("sigma0S", 1.378);
+    parameters.set ("sigma1S", 3.57e-3);
     parameters.set ("rhoS", 1156.481);
     parameters.set ("ES", 9.9e9);
     
