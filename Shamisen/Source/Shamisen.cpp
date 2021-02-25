@@ -17,7 +17,7 @@ Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	AS1(*parameters.getVarPointer("A1")),
 	TS1(*parameters.getVarPointer("T1")),
 	ES(*parameters.getVarPointer("ES")),
-	sigma0S(*parameters.getVarPointer("sigma01")),
+	sigma0S(*parameters.getVarPointer("sigma0S")),
 	AB(*parameters.getVarPointer("AB")),
 	EB(*parameters.getVarPointer("EB")),
 	HB(*parameters.getVarPointer("HB")),
