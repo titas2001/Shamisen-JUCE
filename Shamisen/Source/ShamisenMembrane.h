@@ -23,7 +23,7 @@ public:
     void calculateScheme();
     void updateStates();
     
-    double getOutput (double Lratio) { 
+    double getOutput () { 
         sum = 0;
         for(int i = 2; i<Nx-1; ++i){
             for(int j = 2; j<Ny-1; ++j){

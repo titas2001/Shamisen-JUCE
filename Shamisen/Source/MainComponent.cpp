@@ -45,28 +45,25 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     double r2 = 2.83e-4;
     double r3 = 2.10e-4;
     
-    parameters.set ("L1", 1);
-    parameters.set ("rhoS", 1156.481);
-    parameters.set ("A1", r1 * r1 * double_Pi);
-    parameters.set ("T1", 138.67);
-    parameters.set ("ES", 9.9e9);
-    parameters.set ("I1", r1 * r1 * r1 * r1 * double_Pi * 0.25);
     parameters.set ("sigma01", 1.378);
     parameters.set ("sigma11", 3.57e-3);
+    parameters.set ("rhoS", 1156.481);
+    parameters.set ("ES", 9.9e9);
+    
+    parameters.set ("L1", 1);
+    parameters.set ("A1", r1 * r1 * double_Pi);
+    parameters.set ("T1", 138.67);
+    parameters.set ("I1", r1 * r1 * r1 * r1 * double_Pi * 0.25);
 
     parameters.set("L2", 1);
     parameters.set("A2", r2 * r2 * double_Pi);
     parameters.set("T2", 145.53);
     parameters.set("I2", r2 * r2 * r2 * r2 * double_Pi * 0.25);
-    parameters.set("sigma02", 1.378);
-    parameters.set("sigma12", 3.57e-3);
 
     parameters.set("L3", 1);
     parameters.set("A3", r3 * r3 * double_Pi);
     parameters.set("T3", 140.73);
     parameters.set("I3", r3 * r3 * r3 * r3 * double_Pi * 0.25);
-    parameters.set("sigma03", 1.378);
-    parameters.set("sigma13", 3.57e-3);
 
     //=======BRIDGE======================================
     
@@ -92,8 +89,10 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("nu", 0.4);
     
     //// Initialise an instance of the SimpleString class ////
-    myShamisenString1 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "1");
-    addAndMakeVisible (myShamisenString1.get()); // add the string to the application
+    myShamisen = std::make_unique<Shamisen> (parameters, 1.0 / sampleRate);
+    addAndMakeVisible (myShamisen.get()); // add the string to the application
+    //myShamisenString1 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "1");
+    //addAndMakeVisible (myShamisenString1.get()); // add the string to the application
     //myShamisenString2 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "2");
     //addAndMakeVisible (myShamisenString2.get()); // add the string to the application
     //myShamisenString3 = std::make_unique<ShamisenString> (parameters, 1.0 / sampleRate, "3");
@@ -120,8 +119,10 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     float output = 0.0;
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
-        myShamisenString1->calculateScheme();
-        myShamisenString1->updateStates();
+        myShamisen->calculateUpdateEqs();
+        myShamisen->updateStates();
+        //myShamisenString1->calculateScheme();
+        //myShamisenString1->updateStates();
         //myShamisenString2->calculateScheme();
         //myShamisenString2->updateStates();
         //myShamisenString3->calculateScheme();
@@ -131,7 +132,8 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
         //myShamisenBridge->calculateScheme();
         //myShamisenBridge->updateStates();
 
-        output = myShamisenString1->getOutput(0.8); // get output at 0.8L of the string 1
+        output = myShamisen->getOutput(0.8, 0.8);
+        //output = myShamisenString1->getOutput(0.8); // get output at 0.8L of the string 1
         //output = myShamisenString2->getOutput(0.8); // get output at 0.8L of the string 2
         //output = myShamisenString3->getOutput(0.8); // get output at 0.8L of the string 3
         //output = myShamisenBridge->getOutput (0.8); // get output at 0.8L of the bridge
@@ -157,7 +159,8 @@ void MainComponent::paint (juce::Graphics& g)
 void MainComponent::resized()
 {
     // put the string in the application
-    myShamisenString1->setBounds(getLocalBounds());
+    myShamisen->setBounds(getLocalBounds());
+    //myShamisenString1->setBounds(getLocalBounds());
     //myShamisenString2->setBounds(getLocalBounds());
     //myShamisenString3->setBounds(getLocalBounds());
     //myShamisenBridge->setBounds (getLocalBounds());

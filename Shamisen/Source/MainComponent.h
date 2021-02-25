@@ -1,7 +1,8 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "ShamisenString.h"
+#include "Shamisen.h"
+//#include "ShamisenString.h"
 //#include "ShamisenBridge.h"
 //#include "ShamisenMembrane.h"
 //==============================================================================
@@ -31,7 +32,7 @@ public:
 private:
     //==============================================================================
     // Your private member variables go here...
-    std::unique_ptr<ShamisenString> myShamisenString1;
+    std::unique_ptr<Shamisen> myShamisen;
     //std::unique_ptr<ShamisenString> myShamisenString2;
     //std::unique_ptr<ShamisenString> myShamisenString3;
     //std::unique_ptr<ShamisenBridge> myShamisenBridge;
