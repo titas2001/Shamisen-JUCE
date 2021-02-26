@@ -119,6 +119,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
         myShamisen->calculateUpdateEqs();
+        myShamisen->solveSystem();
         myShamisen->updateStates();
         //myShamisenString1->calculateScheme();
         //myShamisenString1->updateStates();
