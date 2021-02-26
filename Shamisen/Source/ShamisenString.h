@@ -32,7 +32,7 @@ public:
     void setStateAt (int time, int lc, double val) { u[time][lc] = val; }; // always uNext
     void addToStateAt (int time, int lc, double val) { u[time][lc] += val; }; // always uNext
     int bringN() { return N; };
-
+    double clamp(double in, double min, double max);
     void excite();
     
     void mouseDown (const MouseEvent& e) override;

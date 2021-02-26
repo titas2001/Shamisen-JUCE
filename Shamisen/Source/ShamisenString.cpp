@@ -87,17 +87,37 @@ void ShamisenString::paint (juce::Graphics& g)
        drawing code..
     */
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    //g.setColour (juce::Colours::grey);
+    //g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("SimpleString", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    //g.setColour (juce::Colours::white);
+    //g.setFont (14.0f);
+    //g.drawText ("SimpleString", getLocalBounds(),
+    //            juce::Justification::centred, true);   // draw some placeholder text
+
+    float stateWidth = getWidth() / static_cast<double> (N - 4);
+    float stateHeight = getHeight() ;
+    int scaling = 10000;
+
+    for (int x = 2; x < N - 2; ++x)
+    {
+        int cVal = clamp(255 * 0.5 * (u[1][x] * scaling + 1), 0, 255);
+        g.setColour(Colour::fromRGBA(cVal, 255, cVal, 127));
+        g.fillRect(  (x - 2) * stateWidth, 0 * stateHeight, stateWidth, stateHeight);
+    }
 }
 
+double ShamisenString::clamp(double in, double min, double max)
+{
+    if (in > max)
+        return max;
+    else if (in < min)
+        return min;
+    else
+        return in;
+}
 void ShamisenString::resized()
 {
     // This method is where you should set the bounds of any child

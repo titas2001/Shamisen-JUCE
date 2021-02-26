@@ -47,7 +47,8 @@ Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	//lS2c = floor((2.0*NS2)/(M_PI*7.0));
 	//lS3c = floor((2.0*NS3)/(M_PI*7.0));
 	// Bridge
-	lBc1 = floor((NB / 2.0 - 1.0) / 2.0);
+	lBc1 = floor((NB / 2.0));
+	//lBc1 = floor((NB / 2.0 - 1.0) / 2.0);
 	//lBc2 = floor(NB/2);
 	//lBc3 = ceil((NB/2 - 1)/2)+lBc2;
 	lBcl = 0;
@@ -59,7 +60,7 @@ Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	mMcr = NMy - floor(NMy / 4.0);
 
 	// Calculate the force multipliers
-	Fs1bMult = 1.0 / (1.0 / (rhoB * AB * hB * (sigma0B + 1.0)) + 1.0 / (rhoS * AS1 * hS1 * (sigma0S + 1.0)));
+	Fs1bMult = 1.0 / (1.0 / (rhoS * AS1 * hS1 * (sigma0S + 1.0)) + 1.0 / (rhoB * AB * hB * (sigma0B + 1.0)));
 	FbmMult = 1.0 / (-1.0 / (rhoB * AB * hB * (sigma0B + 1.0)) - 1.0 / (rhoM * HM * hM * hM * (sigma0M + 1.0)));
 
 
@@ -90,13 +91,13 @@ void Shamisen::resized()
 }
 void Shamisen::solveSystem()
 {
-	Fs1b = Fs1bMult * (-myShamisenBridge->getStateAt(0,lBc1) + myShamisenString1->getStateAt(0,lS1c));
+	Fs1b = Fs1bMult * (myShamisenString1->getStateAt(0,lS1c) - myShamisenBridge->getStateAt(0, lBc1));
 	//Fs2b = Fs2bMult * (-myShamisenBridge->getStateAt(0,lBc2) + myShamisenString1->getStateAt(0,lS2c));
 	//Fs3b = Fs3bMult * (-myShamisenBridge->getStateAt(0,lBc3) + myShamisenString1->getStateAt(0,lS3c));
 
 	// Force from bridge' left and right mounting points to the plate
-	Fbml = FbmMult * (-myShamisenBridge->getStateAt(0,lBcl) + myShamisenMembrane->getStateAt(0,lMcl,mMcl));
-	Fbmr = FbmMult * (-myShamisenBridge->getStateAt(0,lBcr) + myShamisenMembrane->getStateAt(0,lMcr,mMcr));
+	Fbml = FbmMult * (myShamisenMembrane->getStateAt(0,lMcl,mMcl) - myShamisenBridge->getStateAt(0, lBcl));
+	Fbmr = FbmMult * (myShamisenMembrane->getStateAt(0,lMcr,mMcr) - myShamisenBridge->getStateAt(0, lBcr));
 
     // String - Bridge
 	myShamisenString1->addToStateAt(0,lS1c,-(Fs1b / (rhoS * AS1 * hS1 * (sigma0S + 1))));
@@ -113,8 +114,8 @@ void Shamisen::solveSystem()
 	myShamisenBridge->addToStateAt(0, lBcr, -(Fbmr / (rhoB * AB * hB * (sigma0B + 1))));
 	
 	// Membrane - Bridge
-	myShamisenMembrane->addToStateAt(0, lMcr, mMcr, Fbml / (rhoM * HM * hM * hM * (sigma0M + 1)));
-	myShamisenMembrane->addToStateAt(0, lMcr, mMcr, Fbmr / (rhoM * HM * hM * hM * (sigma0M + 1)));
+	myShamisenMembrane->addToStateAt(0, lMcr, mMcr, (Fbml / (rhoM * HM * hM * hM * (sigma0M + 1))));
+	myShamisenMembrane->addToStateAt(0, lMcr, mMcr, (Fbmr / (rhoM * HM * hM * hM * (sigma0M + 1))));
 }
 void Shamisen::updateStates() {
 	myShamisenString1->updateStates();

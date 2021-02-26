@@ -94,7 +94,7 @@ ShamisenBridge::~ShamisenBridge()
     for (int x = 2; x < N - 2; ++x)
     {
         int cVal = clamp(255 * 0.5 * (u[1][x] * scaling + 1), 0, 255);
-        g.setColour(Colour::fromRGBA(cVal, cVal, cVal, 127));
+        g.setColour(Colour::fromRGBA(255, cVal, cVal, 127));
         g.fillRect(0 * stateWidth,(x - 2) * stateHeight, stateWidth, stateHeight);
     }
 }
