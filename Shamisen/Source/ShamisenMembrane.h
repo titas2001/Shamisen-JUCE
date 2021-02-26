@@ -33,7 +33,10 @@ public:
         //Logger::getCurrentLogger()->outputDebugString(String(sum));
         return sum;
     } //return the sum of the vector values
-    
+    double getStateAt (int time, int lcx, int lcy) { return u[time][lcx][lcy]; };
+    void addToStateAt (int time, int lcx, int lcy, double val) { u[time][lcx][lcy] += val; }; // always uNext
+    int bringNx() { return Nx; };
+    int bringNy() { return Ny; };
     void excite();
     
     void mouseDown (const MouseEvent& e) override;

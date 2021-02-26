@@ -69,16 +69,16 @@ private:
     double Fs1bMult, Fs2bMult, Fs3bMult, FbmMult;
 
     // An (N+1) * 3 vector containing the state of the system at all time-steps
-    std::vector<std::vector<double>> u1States;
-    std::vector<double*> u1; // vector of pointers to state vectors
-    std::vector<std::vector<double>> u2States;
-    std::vector<double*> u2; // vector of pointers to state vectors
-    std::vector<std::vector<double>> u3States;
-    std::vector<double*> u3; // vector of pointers to state vectors
+    //std::vector<std::vector<double>> u1States;
+    //std::vector<double*> u1; // vector of pointers to state vectors
+    //std::vector<std::vector<double>> u2States;
+    //std::vector<double*> u2; // vector of pointers to state vectors
+    //std::vector<std::vector<double>> u3States;
+    //std::vector<double*> u3; // vector of pointers to state vectors
 
-    std::vector<std::vector<double>> vStates;
-    std::vector<double*> v; // vector of pointers to state vectors
+    //std::vector<std::vector<double>> vStates;
+    //std::vector<double*> v; // vector of pointers to state vectors
 
-    std::vector<std::vector<std::vector<double>>> wStates;
-    std::vector<std::vector<double*>> w; // vector of pointers to state vectors
+    //std::vector<std::vector<std::vector<double>>> wStates;
+    //std::vector<std::vector<double*>> w; // vector of pointers to state vectors
 };

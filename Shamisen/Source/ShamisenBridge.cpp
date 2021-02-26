@@ -68,8 +68,7 @@ k (k)
 ShamisenBridge::~ShamisenBridge()
 {
 }
-
-void ShamisenBridge::paint (juce::Graphics& g)
+    void ShamisenBridge::paint (juce::Graphics& g)
 {
     /* This demo code just fills the component's background and
        draws some placeholder text to get you started.
@@ -78,15 +77,36 @@ void ShamisenBridge::paint (juce::Graphics& g)
        drawing code..
     */
 
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
+    //g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));   // clear the background
 
-    g.setColour (juce::Colours::grey);
-    g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
+    //g.setColour (juce::Colours::grey);
+    //g.drawRect (getLocalBounds(), 1);   // draw an outline around the component
 
-    g.setColour (juce::Colours::white);
-    g.setFont (14.0f);
-    g.drawText ("Bridge", getLocalBounds(),
-                juce::Justification::centred, true);   // draw some placeholder text
+    //g.setColour (juce::Colours::white);
+    //g.setFont (14.0f);
+    //g.drawText ("Bridge", getLocalBounds(),
+    //            juce::Justification::centred, true);   // draw some placeholder text
+
+    float stateWidth = getWidth() ;
+    float stateHeight = getHeight() / static_cast<double> (N-4);
+    int scaling = 10000;
+
+    for (int x = 2; x < N - 2; ++x)
+    {
+        int cVal = clamp(255 * 0.5 * (u[1][x] * scaling + 1), 0, 255);
+        g.setColour(Colour::fromRGBA(cVal, cVal, cVal, 127));
+        g.fillRect(0 * stateWidth,(x - 2) * stateHeight, stateWidth, stateHeight);
+    }
+}
+
+double ShamisenBridge::clamp(double in, double min, double max)
+{
+    if (in > max)
+        return max;
+    else if (in < min)
+        return min;
+    else
+        return in;
 }
 
 void ShamisenBridge::resized()
@@ -99,26 +119,25 @@ void ShamisenBridge::resized()
 void ShamisenBridge::calculateScheme()
 {
     
-    /// Calculate virtual grid points
-    //um1 = 2*u[1][0]-u[8][1];                    // uB(-1)
-    //um2 = 2*(um1+u[1][1])+u[1][2];              // uB(-2)
-    //uPm1 = 2*u[2][0]-u[2][1];                   // uBPrev(-1)
-    //up1 = 2*u[1][N] - u[1][N-1];                // uB(N+1)
-    //up2 = 2*(up1 - u[1][N-1]) + u[1][N-2];      // uB(N+2)
-    //uPp1 = 2*u[2][N] - u[2][N-1];               // uBPrev(N+1)
+	/// Calculate virtual grid points
+	um1 = 2 * u[1][0] - u[1][1];                    // uB(-1)
+	um2 = 2 * (um1 + u[1][1]) + u[1][2];              // uB(-2)
+	uPm1 = 2 * u[2][0] - u[2][1];                   // uBPrev(-1)
+	up1 = 2 * u[1][N] - u[1][N - 1];                // uB(N+1)
+	up2 = 2 * (up1 - u[1][N - 1]) + u[1][N - 2];      // uB(N+2)
+	uPp1 = 2 * u[2][N] - u[2][N - 1];               // uBPrev(N+1)
     
     
     
     
-    
+    u[0][1] = A1 * u[1][1] + A2 * (u[1][2] + u[1][0]) + A3 * (u[1][3] + um1) + A4 * u[2][1] + A5 * (u[2][2] + u[2][0]);
+    u[0][0] = A1 * u[1][0] + A2 * (u[1][1] + um1) + A3 * (u[1][2] + um2) + A4 * u[2][0] + A5 * (u[2][1] + uPm1);
     for (int l = 2; l < N-1; ++l) // clamped boundaries
     {
         u[0][l] = A1 * u[1][l] + A2 * (u[1][l + 1] + u[1][l - 1]) + A3 * (u[1][l + 2] + u[1][l - 2]) + A4 * u[2][l] + A5 * (u[2][l + 1] + u[2][l - 1]);
     }
-    //u[0][1] = A1 * u[1][1] + A2 * (u[1][1 + 1] + u[1][1 - 1]) + A3 * (u[1][1 + 2] + um1) + A4 * u[2][1] + A5 * (u[2][1 + 1] + u[2][1 - 1]);
-    //u[0][0] = A1 * u[1][0] + A2 * (u[1][1] + um1) + A3 * (u[1][2] + um2) + A4 * u[2][0] + A5 * (u[2][1] + uPm1);
-    //u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N] + u[1][N-2]) + A3 * (up1 + u[1][N-3]) + A4 * u[2][N-1] + A5 * (u[2][N] + u[2][N-2]);
-    //u[0][N] = A1 * u[1][N] + A2 * (up1 + u[1][N - 1]) + A3 * (up2 + u[1][N - 2]) + A4 * u[2][N] + A5 * (uPp1 + u[2][N - 1]);
+    u[0][N-1] = A1 * u[1][N-1] + A2 * (u[1][N] + u[1][N-2]) + A3 * (up1 + u[1][N-3]) + A4 * u[2][N-1] + A5 * (u[2][N] + u[2][N-2]);
+    u[0][N] = A1 * u[1][N] + A2 * (up1 + u[1][N - 1]) + A3 * (up2 + u[1][N - 2]) + A4 * u[2][N] + A5 * (uPp1 + u[2][N - 1]);
 }
 
 void ShamisenBridge::updateStates()
