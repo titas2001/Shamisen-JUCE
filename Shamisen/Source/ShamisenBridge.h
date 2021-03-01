@@ -32,6 +32,7 @@ public:
     void setStateAt (int time, int lc, double val) { u[time][lc] = val; };
     void addToStateAt (int time, int lc, double val) { u[time][lc] += val; };
     int bringN() { return N; };
+    double bring_h() { return h; };
     void excite();
     
     void mouseDown (const MouseEvent& e) override;

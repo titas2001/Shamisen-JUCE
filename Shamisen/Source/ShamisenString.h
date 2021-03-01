@@ -29,12 +29,12 @@ public:
     
     double getOutput (double Lratio) { return u[1][static_cast<int> (round((N+1) * Lratio))]; } //return u at the current sample at a location given by the length ratio
     double getStateAt (int time, int lc) { return u[time][lc]; };
-    void setStateAt (int time, int lc, double val) { u[time][lc] = val; }; // always uNext
-    void addToStateAt (int time, int lc, double val) { u[time][lc] += val; }; // always uNext
+    void setStateAt (int time, int lc, double val) { u[time][lc] = val; }; 
+    void addToStateAt (int time, int lc, double val) { u[time][lc] += val; }; 
     int bringN() { return N; };
+    double bring_h() { return h; };
     double clamp(double in, double min, double max);
     void excite();
-    
     void mouseDown (const MouseEvent& e) override;
     
 private:

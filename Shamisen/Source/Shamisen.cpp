@@ -14,10 +14,14 @@
 Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	k(k),
 	rhoS(*parameters.getVarPointer("rhoS")),
-	AS1(*parameters.getVarPointer("A1")),
-	TS1(*parameters.getVarPointer("T1")),
 	ES(*parameters.getVarPointer("ES")),
 	sigma0S(*parameters.getVarPointer("sigma0S")),
+	AS1(*parameters.getVarPointer("A1")),
+	TS1(*parameters.getVarPointer("T1")),
+	AS2(*parameters.getVarPointer("A2")),
+	TS2(*parameters.getVarPointer("T2")),
+	AS3(*parameters.getVarPointer("A3")),
+	TS3(*parameters.getVarPointer("T3")),
 	AB(*parameters.getVarPointer("AB")),
 	EB(*parameters.getVarPointer("EB")),
 	HB(*parameters.getVarPointer("HB")),
@@ -38,13 +42,19 @@ Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	addAndMakeVisible(myShamisenString1.get());
 	addAndMakeVisible(myShamisenString2.get());
 	addAndMakeVisible(myShamisenString3.get());
-	// Get Ns
+	// Get N's
 	NS1 = myShamisenString1->bringN();
 	NS2 = myShamisenString2->bringN();
 	NS3 = myShamisenString3->bringN();
 	NB = myShamisenBridge->bringN();
 	NMx = myShamisenMembrane->bringNx();
 	NMy = myShamisenMembrane->bringNy();
+	// Get h's
+	hS1 = myShamisenString1->bring_h();
+	hS2 = myShamisenString2->bring_h();
+	hS3 = myShamisenString3->bring_h();
+	hB = myShamisenBridge->bring_h();
+	hM = myShamisenMembrane->bring_h();
 	//  CONNECTION LOCATIONS
 	//  String
 	lS1c = floor((2.0 * NS1) / (3.14 * 7.0));
@@ -68,7 +78,7 @@ Shamisen::Shamisen(NamedValueSet& parameters, double k) :
 	Fs2bMult = 1.0 / (1.0 / (rhoS * AS2 * hS2 * (sigma0S + 1.0)) + 1.0 / (rhoB * AB * hB * (sigma0B + 1.0)));
 	Fs3bMult = 1.0 / (1.0 / (rhoS * AS3 * hS3 * (sigma0S + 1.0)) + 1.0 / (rhoB * AB * hB * (sigma0B + 1.0)));
 	FbmMult = 1.0 / (-1.0 / (rhoB * AB * hB * (sigma0B + 1.0)) - 1.0 / (rhoM * HM * hM * hM * (sigma0M + 1.0)));
-
+	//FbmMult = FbmMult;
 
 }
 
@@ -107,21 +117,21 @@ void Shamisen::solveSystem()
 	Fbml = FbmMult * (myShamisenMembrane->getStateAt(0,lMcl,mMcl) - myShamisenBridge->getStateAt(0, lBcl));
 	Fbmr = FbmMult * (myShamisenMembrane->getStateAt(0,lMcr,mMcr) - myShamisenBridge->getStateAt(0, lBcr));
 
-    // String - Bridge
+    // Bridge -> String
 	myShamisenString1->addToStateAt(0,lS1c,-(Fs1b / (rhoS * AS1 * hS1 * (sigma0S + 1))));
 	myShamisenString2->addToStateAt(0,lS2c,-(Fs2b / (rhoS * AS2 * hS2 * (sigma0S + 1))));
 	myShamisenString3->addToStateAt(0,lS3c,-(Fs3b / (rhoS * AS3 * hS3 * (sigma0S + 1))));
     
-	// Bridge - String
+	// String -> Bridge
 	myShamisenBridge->addToStateAt(0,lBc1, Fs1b / (rhoB * AB * hB * (sigma0B + 1)));
 	myShamisenBridge->addToStateAt(0,lBc2, Fs2b / (rhoB * AB * hB * (sigma0B + 1)));
 	myShamisenBridge->addToStateAt(0,lBc3, Fs3b / (rhoB * AB * hB * (sigma0B + 1)));
 	
-	// Bridge - Membrane
+	// Membrane -> Bridge
 	myShamisenBridge->addToStateAt(0, lBcl, -(Fbml / (rhoB * AB * hB * (sigma0B + 1))));
 	myShamisenBridge->addToStateAt(0, lBcr, -(Fbmr / (rhoB * AB * hB * (sigma0B + 1))));
 	
-	// Membrane - Bridge
+	// Bridge -> Membrane
 	myShamisenMembrane->addToStateAt(0, lMcr, mMcr, (Fbml / (rhoM * HM * hM * hM * (sigma0M + 1))));
 	myShamisenMembrane->addToStateAt(0, lMcr, mMcr, (Fbmr / (rhoM * HM * hM * hM * (sigma0M + 1))));
 }
