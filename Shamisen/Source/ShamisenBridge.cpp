@@ -89,7 +89,7 @@ ShamisenBridge::~ShamisenBridge()
 
     float stateWidth = getWidth() ;
     float stateHeight = getHeight() / static_cast<double> (N-4);
-    int scaling = 10000;
+    int scaling = 1000;
 
     for (int x = 2; x < N - 2; ++x)
     {

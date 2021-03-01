@@ -28,19 +28,25 @@ public:
     void solveSystem();
     void updateStates();
 
-    double getOutput(double ratioB, double ratioS1) { 
-        return myShamisenBridge->getOutput(ratioB)+ myShamisenString1->getOutput(ratioS1)+ myShamisenMembrane->getOutput();
+    double getOutput(double ratioB, double ratioS1, double ratioS2, double ratioS3) {
+        return myShamisenBridge->getOutput(ratioB)+ 
+            myShamisenString1->getOutput(ratioS1) + myShamisenString2->getOutput(ratioS2) + myShamisenString3->getOutput(ratioS3)
+            + myShamisenMembrane->getOutput();
     };
     
 
-    std::shared_ptr<ShamisenString> getString() { return myShamisenString1; };
+    std::shared_ptr<ShamisenString> getString1() { return myShamisenString1; };
+    std::shared_ptr<ShamisenString> getString2() { return myShamisenString2; };
+    std::shared_ptr<ShamisenString> getString3() { return myShamisenString3; };
     std::shared_ptr<ShamisenBridge> getBridge() { return myShamisenBridge; };
-    std::shared_ptr<ShamisenMembrane> getBody() { return myShamisenMembrane; };
+    std::shared_ptr<ShamisenMembrane> getMembrane() { return myShamisenMembrane; };
 
 private:
     double k;
     // Instrument components (String, body and bridge)
     std::shared_ptr<ShamisenString> myShamisenString1;
+    std::shared_ptr<ShamisenString> myShamisenString2;
+    std::shared_ptr<ShamisenString> myShamisenString3;
     std::shared_ptr<ShamisenBridge> myShamisenBridge;
     std::shared_ptr<ShamisenMembrane> myShamisenMembrane;
 
@@ -67,18 +73,4 @@ private:
 
     // Connection point multipliers
     double Fs1bMult, Fs2bMult, Fs3bMult, FbmMult;
-
-    // An (N+1) * 3 vector containing the state of the system at all time-steps
-    //std::vector<std::vector<double>> u1States;
-    //std::vector<double*> u1; // vector of pointers to state vectors
-    //std::vector<std::vector<double>> u2States;
-    //std::vector<double*> u2; // vector of pointers to state vectors
-    //std::vector<std::vector<double>> u3States;
-    //std::vector<double*> u3; // vector of pointers to state vectors
-
-    //std::vector<std::vector<double>> vStates;
-    //std::vector<double*> v; // vector of pointers to state vectors
-
-    //std::vector<std::vector<std::vector<double>>> wStates;
-    //std::vector<std::vector<double*>> w; // vector of pointers to state vectors
 };
