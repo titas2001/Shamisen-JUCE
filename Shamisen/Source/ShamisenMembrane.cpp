@@ -30,7 +30,7 @@ k (k)
     double stabilityTerm = cSq * k * k + 4.0 * sigma1 * k; // just easier to write down below
     h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
     
-    if (h < 0.03)
+    if (h < 0.03) // makes the membrane 33x33 size
         h = 0.03;
         
     Nx = floor(Lx/h);
@@ -182,8 +182,8 @@ void ShamisenMembrane::excite()
     {   
         for (int m = startM; m < endM; ++m)
         {
-            u[1][l][m] += 1e-50 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
-            u[2][l][m] += 1e-50 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * 3.14 * (m - startM) / (endM - startM)));
+            u[1][l][m] += 0.001 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * double_Pi * (m - startM) / (endM - startM)));
+            u[2][l][m] += 0.001 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * double_Pi * (m - startM) / (endM - startM)));
         }
     }
 }
