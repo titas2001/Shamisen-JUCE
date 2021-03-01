@@ -101,10 +101,10 @@ void Shamisen::calculateUpdateEqs()
 void Shamisen::resized()
 {
 	Rectangle<int> totArea = getLocalBounds();
-	myShamisenString1->setBounds(totArea.removeFromTop(getHeight() / 4.0));
-	myShamisenString2->setBounds(totArea.removeFromTop(getHeight() / 4.0));
-	myShamisenString3->setBounds(totArea.removeFromTop(getHeight() / 4.0));
 	myShamisenBridge->setBounds(totArea.removeFromRight(getWidth() / 8.0));
+	myShamisenString1->setBounds(totArea.removeFromTop(getHeight() / 12.0));
+	myShamisenString2->setBounds(totArea.removeFromTop(getHeight() / 12.0));
+	myShamisenString3->setBounds(totArea.removeFromTop(getHeight() / 12.0));
 	myShamisenMembrane->setBounds(totArea);
 }
 void Shamisen::solveSystem()

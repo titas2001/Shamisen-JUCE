@@ -30,8 +30,8 @@ k (k)
     double stabilityTerm = cSq * k * k + 4.0 * sigma1 * k; // just easier to write down below
     h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
     
-    if (h < 0.09)
-        h = 0.09;
+    if (h < 0.03)
+        h = 0.03;
         
     Nx = floor(Lx/h);
     Ny = floor(Ly/h);
