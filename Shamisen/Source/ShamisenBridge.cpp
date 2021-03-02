@@ -24,7 +24,7 @@ k (k)
 
     double stabilityTerm = 4.0 * sigma1 * k; // just easier to write down below
     
-    h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k)/2.0);
+    h = sqrt ((stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k))/2.0);
     N = floor (L / h);
     h = 1.0 / N; // recalculate h
     //Logger::getCurrentLogger()->outputDebugString("samples: "+String(N));
