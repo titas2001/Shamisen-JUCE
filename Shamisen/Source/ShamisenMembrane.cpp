@@ -182,8 +182,8 @@ void ShamisenMembrane::excite()
     {   
         for (int m = startM; m < endM; ++m)
         {
-            u[1][l][m] += 0.001 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * double_Pi * (m - startM) / (endM - startM)));
-            u[2][l][m] += 0.001 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * double_Pi * (m - startM) / (endM - startM)));
+            u[1][l][m] += 0.01 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL-startL))) *(1 - cos(2.0 * double_Pi * (m - startM) / (endM - startM)));
+            u[2][l][m] += 0.01 * (1 - cos(2.0 * 3.14 * (l - startL) / (endL - startL))) *(1 - cos(2.0 * double_Pi * (m - startM) / (endM - startM)));
         }
     }
 }
