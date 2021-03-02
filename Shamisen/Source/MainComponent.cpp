@@ -91,9 +91,9 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     myShamisen = std::make_unique<Shamisen> (parameters, 1.0 / sampleRate);
     addAndMakeVisible (myShamisen.get()); // add the string to the application
 
-    myShamisenString1 = myShamisen->getString1();
+    //myShamisenString1 = myShamisen->getString1();
     myShamisenString2 = myShamisen->getString2();
-    myShamisenString3 = myShamisen->getString3();
+    //myShamisenString3 = myShamisen->getString3();
     myShamisenBridge = myShamisen->getBridge();
     myShamisenMembrane = myShamisen->getMembrane();
     
@@ -115,7 +115,7 @@ void MainComponent::getNextAudioBlock (const juce::AudioSourceChannelInfo& buffe
     for (int i = 0; i < bufferToFill.numSamples; ++i)
     {
         myShamisen->calculateUpdateEqs();
-        myShamisen->solveSystem();
+        //myShamisen->solveSystem();
         myShamisen->updateStates();
 
 
