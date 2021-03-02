@@ -30,7 +30,7 @@ public:
 
     double getOutput(double ratioB, double ratioS1, double ratioS2, double ratioS3) {
         return myShamisenBridge->getOutput(ratioB)+ 
-            /*myShamisenString1->getOutput(ratioS1) +*/ myShamisenString2->getOutput(ratioS2) /*+ myShamisenString3->getOutput(ratioS3)*/
+            myShamisenString1->getOutput(ratioS1) + myShamisenString2->getOutput(ratioS2) + myShamisenString3->getOutput(ratioS3)
             + myShamisenMembrane->getOutput();
         //Logger::getCurrentLogger()->outputDebugString("String1 = "+String(myShamisenString1->getOutput(ratioS1)));
         //Logger::getCurrentLogger()->outputDebugString("String2 = " + String(myShamisenString2->getOutput(ratioS2)));

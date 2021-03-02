@@ -24,10 +24,10 @@ k (k)
 
     double stabilityTerm = 4.0 * sigma1 * k; // just easier to write down below
     
-    h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k));
+    h = sqrt (stabilityTerm + sqrt ((stabilityTerm * stabilityTerm) + 16.0 * kappaSq * k * k)/2.0);
     N = floor (L / h);
     h = 1.0 / N; // recalculate h
-    Logger::getCurrentLogger()->outputDebugString("samples: "+String(N));
+    //Logger::getCurrentLogger()->outputDebugString("samples: "+String(N));
     // initialise vectors
     uStates.reserve (3); // prevents allocation errors
     
@@ -104,7 +104,7 @@ void ShamisenBridge::calculateScheme()
     
 	/// Calculate virtual grid points
 	um1 = 2 * u[1][0] - u[1][1];                    // uB(-1)
-	um2 = 2 * (um1 + u[1][1]) + u[1][2];            // uB(-2)
+	um2 = 2 * (um1 - u[1][1]) + u[1][2];            // uB(-2)
 	uPm1 = 2 * u[2][0] - u[2][1];                   // uBPrev(-1)
 	up1 = 2 * u[1][N] - u[1][N - 1];                // uB(N+1)
 	up2 = 2 * (up1 - u[1][N - 1]) + u[1][N - 2];    // uB(N+2)
