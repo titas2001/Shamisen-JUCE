@@ -45,7 +45,7 @@ public:
     std::shared_ptr<ShamisenMembrane> getMembrane() { return myShamisenMembrane; };
 
 private:
-    double k;
+    double k, k2;
     // Instrument components (String, body and bridge)
     std::shared_ptr<ShamisenString> myShamisenString1;
     std::shared_ptr<ShamisenString> myShamisenString2;

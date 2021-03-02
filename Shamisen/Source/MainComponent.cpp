@@ -72,7 +72,7 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("rhoB", 500.0);
     parameters.set ("AB", 2.69e-3 * 0.0075);
     parameters.set ("EB", 9.5e9);
-    parameters.set ("sigma0B", 1.34);
+    parameters.set ("sigma0B", 1.343);
     parameters.set ("sigma1B", 7.59e-2);
     
     //=======MEMBRANE====================================
@@ -83,9 +83,10 @@ void MainComponent::prepareToPlay (int samplesPerBlockExpected, double sampleRat
     parameters.set ("TM", 4000.0);
     parameters.set ("EM", 3e9);
     parameters.set ("HM", 0.0002);
-    parameters.set ("sigma0M", 1.37806 );
-    parameters.set ("sigma1M", 1.539e-4);
+    parameters.set ("sigma0M", 1.378062296963499 * 2.0);
+    parameters.set ("sigma1M", 0.096055930949692 * 2.0);
     parameters.set ("nu", 0.4);
+    parameters.set("ratio", 1);
     
     //// Initialise an instance of the SimpleString class ////
     myShamisen = std::make_unique<Shamisen> (parameters, 1.0 / sampleRate);

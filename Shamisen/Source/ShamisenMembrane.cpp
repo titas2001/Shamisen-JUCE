@@ -21,6 +21,7 @@ H (*parameters.getVarPointer ("HM")),
 sigma0 (*parameters.getVarPointer ("sigma0M")),
 sigma1 (*parameters.getVarPointer ("sigma1M")),
 nu (*parameters.getVarPointer ("nu")),
+ratio(*parameters.getVarPointer("ratio")),
 k (k)
 {
     D = E*H*H*H/(12.0*(1.0 - nu*nu));
@@ -72,12 +73,12 @@ k (k)
     
     D1 = 1.0 / (1.0 + sigma0 * k);                                         // u{l,m}^{n+1}
     
-    A1 = (-20.0*kappaSq/h4 - 4.0*cSq/(h*h) - 8.0*sigma1/(k*h*h))*k*k + 2.0;  // u_{l,m}^n
-    A2 = (8.0*kappaSq/h4 + cSq/(h*h) + 2.0*sigma1/(k*h*h))*k*k;              // u_{l+-1 || m+-1}^n
-    A3 = (-2.0*kappaSq*k*k)/(h4);                                          // u_{l+-2 && m+-2}^n
-    A4 = (-1.0*kappaSq*k*k)/(h4);                                          // u_{l+-2 || m+-2}^{n}
-    A5 = ((8.0*sigma1*k*k)/(k*h*h) + k*sigma0 - 1.0);                        // u_{l,m}^{n-1}
-    A6 = ((-2.0*sigma1*k*k)/(k*h*h));                                      // u_{l+-1 || m+-1}^{n-1}
+    A1 = (-20.0*kappaSq/h4 - 4.0*cSq/(h*h) - 8.0*sigma1/(k*h*h))*(k*k) + 2.0;  // u_{l,m}^n
+    A2 = (8.0*kappaSq/h4 + cSq/(h*h) + 2.0*sigma1/(k*h*h))*(k*k);              // u_{l+-1 || m+-1}^n
+    A3 = (-2.0*kappaSq*(k*k))/(h4);                                          // u_{l+-2 && m+-2}^n
+    A4 = (-1.0*kappaSq*(k*k))/(h4);                                          // u_{l+-2 || m+-2}^{n}
+    A5 = ((8.0*sigma1*(k*k))/(k*h*h) + k*sigma0 - 1.0);                        // u_{l,m}^{n-1}
+    A6 = ((-2.0*sigma1*(k*k))/(k*h*h));                                      // u_{l+-1 || m+-1}^{n-1}
     
     // Divide by u_{l,m}^{n+1} term
     A1 *= D1;
@@ -86,6 +87,7 @@ k (k)
     A4 *= D1;
     A5 *= D1;
     A6 *= D1;
+    //A6 = A6;
 }
 
 ShamisenMembrane::~ShamisenMembrane()
