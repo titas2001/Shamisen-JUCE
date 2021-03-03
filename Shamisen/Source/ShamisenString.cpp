@@ -138,8 +138,8 @@ void ShamisenString::excite()
 
     for (int l = start; l < end; ++l)
     {
-        u[1][l] += 0.05 * (1.0 - cos(2.0 * double_Pi * l / width));
-        u[2][l] += 0.05 * (1.0 - cos(2.0 * double_Pi * l / width));
+        u[1][l] += 0.03 * (1.0 - cos(2.0 * double_Pi * l / width));
+        u[2][l] += 0.03 * (1.0 - cos(2.0 * double_Pi * l / width));
     }
     
 }
