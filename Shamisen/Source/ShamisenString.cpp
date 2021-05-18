@@ -39,7 +39,7 @@ ShamisenString::ShamisenString (NamedValueSet& parameters, double k, String stri
     uStates.reserve (3); // prevents allocation errors
     
     for (int i = 0; i < 3; ++i)
-        uStates.push_back (std::vector<double> (N+1, 0));
+        uStates.push_back (std::vector<double> (N+1, 0.0));
     
     u.resize (3);
     
